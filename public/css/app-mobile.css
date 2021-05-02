@@ -1,0 +1,17 @@
+@media (max-width: 768px) {
+    .row > div {
+        margin-bottom: 10px;
+    }
+
+    #register_lorem {
+        width: 100%;
+    }
+
+    #home_hr {
+        visibility: visible;
+    }
+
+    .logo {
+        width: 40%;
+    }
+}

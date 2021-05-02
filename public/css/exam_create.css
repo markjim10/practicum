@@ -1,0 +1,9 @@
+.question {
+    color: #00214e;
+    font-weight: bold;
+}
+
+.answer {
+    color: green;
+    font-weight: bold;
+}
