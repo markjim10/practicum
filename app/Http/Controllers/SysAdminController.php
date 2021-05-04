@@ -59,7 +59,6 @@ class SysAdminController extends Controller
         $user = User::where('id', $id)->first();
         $trail = "Removed user " . $user->username;
 
-        Helper::saveTrails($trail);
         $user->delete();
 
         $users = User::where('role', '!=', 'applicant')->get();
@@ -79,7 +78,6 @@ class SysAdminController extends Controller
         $user->save();
 
         $trail = "Updated user " . $user->username . " as " . $user->role;
-        Helper::saveTrails($trail);
 
         return redirect()->back()->with('message', 'User updated.');
     }

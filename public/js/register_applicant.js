@@ -1,26 +1,3 @@
-var inputText = document.querySelectorAll("input[type=text]");
-for (i = 0; i < inputText.length; i++) {
-    inputText[i].classList.add("form-control");
-    inputText[i].classList.add("form-control-sm");
-}
-
-var span = document.querySelectorAll("span");
-for (i = 0; i < span.length; i++) {
-    span[i].classList.add("required");
-}
-
-var input = document.querySelectorAll("input");
-for (i = 0; i < input.length; i++) {
-    input[i].setAttribute("required", "true");
-}
-
-var select = document.querySelectorAll("select");
-for (i = 0; i < select.length; i++) {
-    select[i].classList.add("form-control");
-    select[i].classList.add("form-control-sm");
-    select[i].setAttribute("required", "true");
-}
-
 var province = document.querySelector("#province");
 province.onchange = (e) => {
     var id = e.target.value;
@@ -41,9 +18,7 @@ province.onchange = (e) => {
             console.log(response);
             response.forEach((item) => {
                 console.log(item.city_municipality_description);
-
                 var city = document.querySelector("#city");
-
                 var node = document.createElement("option");
                 var textnode = document.createTextNode(
                     item.city_municipality_description
@@ -77,7 +52,6 @@ application.onchange = (e) => {
         },
         success: function (response) {
             console.log(response);
-
             response.forEach((item) => {
                 var city = document.querySelector("#preferred_program");
                 var node = document.createElement("option");
@@ -316,15 +290,6 @@ submit.onsubmit = (e) => {
 
     var email = document.querySelector("#email_message").textContent;
     if (email == "Enter a valid Email" || email == "Email is unavailable") {
-        validation = false;
-    }
-
-    var password = document.querySelector("#password_message").textContent;
-    if (
-        password == "The Passwords do not match" ||
-        password ==
-            "The length of the password and confirm password must be at least 4 characters"
-    ) {
         validation = false;
     }
 

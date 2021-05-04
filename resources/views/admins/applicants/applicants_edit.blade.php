@@ -2,7 +2,6 @@
 @extends('sidebars.sidebar')
 @section('admin')
 
-
 <div class="container-fluid mt-5 mb-5">
     <div class="card">
         <div class="card-body">

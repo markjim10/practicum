@@ -1,47 +1,49 @@
 <?php
 
-namespace App;
+namespace App\Services;
 
 use App\User;
+use App\Applicant;
+use App\AppResult;
+use Illuminate\Http\Request;
+use Coreproc\MsisdnPh\Msisdn;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Model;
 
-class Applicant extends Model
+class RegisterService
 {
-    public $timestamps = false;
-
-    protected $fillable = ['id', 'user_id', 'first_name', 'middle_name', 'last_name', 'province', 'city', 'brgy', 'phone', 'date_of_birth', 'application', 'preferred_program', 'school_last_attended', 'applicant_photo', 'card_photo'];
-
-    public function user()
+    public function validateEmail($email)
     {
-        return $this->belongsTo(User::class);
+        if (User::where('email', $email)->first() == null) {
+            return "not taken";
+        } else {
+            return "taken";
+        }
     }
 
-    public function program()
+    public function validatePhone($phone)
     {
-        return $this->belongsTo(Program::class);
+        if (Msisdn::validate($phone)) {
+            return "valid";
+        } else {
+            return "invalid";
+        }
     }
 
-    public function appResult()
+    public function getMonths()
     {
-        return $this->hasOne(AppResult::class);
+        return [
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+        ];
     }
 
-    public function feedbacks()
+    public function getProvinces()
     {
-        return $this->hasMany(Feedback::class);
+        return DB::table('philippine_provinces')->orderBy('province_description', 'asc')->get();
     }
 
     public static function registerApplicant($request)
     {
-        // $email = request('email_address');
-        // $password = Hash::make('password');
-        // $dateOfBirth = request('birth_month') . ' ' . request('birth_day') . ' ' . request('birth_year');
-        // $province = DB::table('philippine_provinces')
-        //     ->where('province_code', request('province'))
-        //     ->value('province_description');
-
         $email = request('email_address');
         $password = Hash::make('changeme');
         $dateOfBirth = request('birth_month') . ' ' . request('birth_day') . ' ' . request('birth_year');

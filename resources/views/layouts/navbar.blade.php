@@ -1,9 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark site_bg">
     <a id="navbar-guest" class="navbar-brand" href="/">
 
-        {{-- https://i.ibb.co/br9yvGc/MCLLogo-Mapua-W.png --}}
-        {{-- https://i.ibb.co/gWP5J0f/39029495-2408320269449162-2114921542-n.jpg --}}
-
     <img src="{{ asset('images/logo.png') }}" width="80"></a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,11 +18,11 @@
             </li>
 
             <li class="{{ (request()->is('about')) ? 'active' : '' }}">
-                <a class="nav-item nav-link" href="/about">About Us</a>
+                <a class="nav-item nav-link" href="/about">About</a>
             </li>
 
             <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
-                <a class="nav-item nav-link" href="/contact">Contact Us</a>
+                <a class="nav-item nav-link" href="/contact">Contact</a>
             </li>
         </ul>
     </div>

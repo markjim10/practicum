@@ -32,9 +32,6 @@
           <div class="msger-header-title">
             <i class="fas fa-comment-alt"></i> OJT Chatbot Helper
           </div>
-          {{-- <div class="msger-header-options">
-            <span><i class="fa fa-circle"></i></span>
-          </div> --}}
         </header>
 
         <main class="msger-chat">
@@ -53,7 +50,6 @@
           <div class="msg right-msg">
 
           </div>
-
         </main>
         <form class="msger-inputarea">
           <input type="text" class="msger-input" placeholder="Enter your message...">
@@ -88,7 +84,6 @@ function appendMessage(name, side, text) {
 
   const msgHTML = `
     <div class="msg ${side}-msg">
-
       <div class="msg-bubble">
         <div class="msg-info">
           <div class="msg-info-name">${name}</div>
@@ -104,9 +99,8 @@ function appendMessage(name, side, text) {
 }
 
 function botResponse(response) {
-  message = response;
-
-  $.ajax({
+    message = response;
+    $.ajax({
         type: "GET",
         url: "/chatbot/" + message + "",
         data: {
@@ -117,7 +111,6 @@ function botResponse(response) {
             appendMessage(BOT_NAME, "left", response);
         },
     });
-
 }
 
 function get(selector, root = document) {

@@ -1,7 +1,6 @@
 @section('content')
 
-
-<script src="{{ secure_asset('js/toggle.js') }}" defer></script>
+{{-- <script src="{{ secure_asset('js/toggle.js') }}" defer></script> --}}
 <script src="{{ asset('js/toggle.js') }}" defer></script>
 
   <div class="d-flex" id="wrapper">

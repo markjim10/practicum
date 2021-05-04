@@ -7,14 +7,14 @@ Auth::routes();
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 // GUEST CONTROLLER
-Route::get('/', 'GuestController@index');
-Route::get('/about', 'GuestController@about');
-Route::get('/chatbot', 'GuestController@chatbot');
-Route::get('/contact', 'GuestController@contact');
-Route::get('/programs', 'GuestController@programs');
-Route::get('/schedule', 'GuestController@schedule');
-Route::get('/register-applicant', 'GuestController@register');
-Route::post('/register-applicant', 'GuestController@store');
+// Route::get('/', 'GuestController@index');
+// Route::get('/about', 'GuestController@about');
+// Route::get('/chatbot', 'GuestController@chatbot');
+// Route::get('/contact', 'GuestController@contact');
+// Route::get('/programs', 'GuestController@programs');
+// Route::get('/schedule', 'GuestController@schedule');
+// Route::get('/register-applicant', 'GuestController@register');
+// Route::post('/register-applicant', 'GuestController@store');
 
 Route::get('get_city/{id}', 'GuestController@get_city');
 Route::get('email_validation/{email}', 'GuestController@email_validation');
@@ -74,6 +74,8 @@ Route::get('/remove_user/{id}', 'SysAdminController@remove_user');
 Route::get('/generate', 'GenerateController@index');
 Route::post('/generate', 'GenerateController@generate_applicants');
 Route::get('/approve', 'GenerateController@approve');
+Route::get('/createSubject', 'GenerateController@createSubject');
+
 
 // CHAT BOT CONTROLLER
 Route::get('/admins/chatbots/chatbot_home', 'ChatBotController@index');
@@ -104,3 +106,28 @@ Route::get('reports_school_passing', 'ReportsController@reports_school_passing')
 Route::get('editProfile/{id}', 'UserController@editProfile');
 Route::post('updateProfile', 'UserController@updateProfile');
 Route::post('changePassword', 'UserController@changePassword');
+
+// Dashboard
+Route::get('getPreferredPrograms', 'DashboardController@getPreferredPrograms');
+Route::get('getApplicantsPassingRate', 'DashboardController@getApplicantsPassingRate');
+Route::get('getExamDates', 'DashboardController@getExamDates');
+
+// Home
+
+Route::get('/', 'HomeController@index');
+Route::get('/about', 'HomeController@about');
+Route::get('/chatbot', 'HomeController@chatbot');
+Route::get('/contact', 'HomeController@contact');
+Route::get('/programs', 'HomeController@programs');
+Route::get('/schedule', 'HomeController@schedule');
+
+// Register
+Route::get('/register_applicant', 'RegisterController@register');
+Route::post('/register_applicant', 'RegisterController@store');
+Route::get('get_city/{id}', 'RegisterController@get_city');
+Route::get('email_validation/{email}', 'RegisterController@email_validation');
+Route::get('phone_validation/{phone}', 'RegisterController@phone_validation');
+Route::get('/get_application/{id}', 'RegisterController@get_application');
+
+// APPLICANTS CONTROLLER
+Route::get('selectApplicantsByStatus/{status}', 'AdminController@selectApplicantsByStatus');

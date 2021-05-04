@@ -50,25 +50,6 @@ class GuestController extends Controller
         return Program::selectedApplication($id);
     }
 
-    public function email_validation($email)
-    {
-        return Helper::validateEmail($email);
-    }
-
-    public function phone_validation($phone)
-    {
-        return Helper::validatePhone($phone);
-    }
-
-    public function register()
-    {
-        $provinces = DB::table('philippine_provinces')->orderBy('province_description', 'asc')->get();
-        $months = Helper::getMonths();
-        $programs = Program::all();
-
-        return view('guest.register', compact('programs', 'months', 'provinces'));
-    }
-
     public function store(Request $request)
     {
         Applicant::registerApplicant($request);

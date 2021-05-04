@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Choice;
+use App\Subject;
+use App\Question;
 use App\Applicant;
 use App\AppResult;
 use Illuminate\Http\Request;
@@ -24,6 +27,35 @@ class GenerateController extends Controller
             $item->save();
         }
         return 'approved';
+    }
+
+    public function createSubject()
+    {
+        $name = 'Math';
+        $num_questions = 10;
+
+        $subject = new Subject();
+        $subject->name = $name;
+        $subject->num_questions = $num_questions;
+        $subject->save();
+
+        $subject = Subject::where('id', $subject->id)->first();
+
+        for ($i = 0; $i < $num_questions; $i++) {
+            $question = new Question();
+            $question->subject_id = $subject->id;
+            $question->question = $i . ' + ' . $i;
+            $question->answer = $i + $i;
+            $question->save();
+
+            for ($j = 0; $j < 4; $j++) {
+                $choice = new Choice();
+                $choice->subject_id = $subject->id;
+                $choice->question_id = $question->id;
+                $choice->choice = $question->answer + $j;
+                $choice->save();
+            }
+        }
     }
 
     public function generateRandom($min, $max)

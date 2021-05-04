@@ -31,6 +31,7 @@ class ApplicantController extends Controller
         $isDatePassed = "";
         $isExamLive = "";
 
+
         $yourExam = ExamDate::where('id', $app->appResult->exam_date)->first();
         if ($yourExam != null) {
             $start = $yourExam->exam_start;
@@ -41,6 +42,7 @@ class ApplicantController extends Controller
             $isDatePassed = json_encode($now->greaterThan($end));
             $isExamLive = json_encode(Carbon::now()->between($start, $end));
         }
+
 
         return view('applicants.index', compact(
             'app',
@@ -109,7 +111,6 @@ class ApplicantController extends Controller
             ->where('temp_answers.applicant_id', '=', $app->id)
             ->where('subjects.status', '=', 'approved')
             ->inRandomOrder()->get();
-
 
         return view('applicants.exam_live', compact(
             'app',

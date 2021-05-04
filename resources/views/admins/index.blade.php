@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="col text-right">
-            Hello, {{$admin->name}}
+            Hello, {{ Auth::user()->username }}
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <div class="card mb-5">
             <div class="card-header">Preferred Programs</div>
                 <div class="card-body">
-                    <div class="chart-container" style="position: relative; height:40vh; width:100%">
+                    <div class="chart-container">
                         <canvas id="myChartCourses"></canvas>
                     </div>
 
@@ -47,13 +47,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($exams_results as $item)
+                            {{-- @foreach($exams_results as $item)
                             <tr>
                                 <td>{{$item->subject}}</td>
                                 <td>{{$item->average}} %</td>
                                 <td>{{$item->num_questions}}</td>
                             </tr>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
@@ -90,12 +90,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($schoolsPassing as $item)
+                            @foreach($schoolPassingRate as $item)
                             <tr>
                                 <td>{{$item->school}}</td>
                                 <td>{{$item->total}}</td>
-                                <td>{{$item->pass}}</td>
-                                <td>{{$item->passing}}%</td>
+                                <td>{{$item->passed}}</td>
+                                <td>{{$item->average}}%</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -122,13 +122,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($passers as $item)
+                            {{-- @foreach($passers as $item)
                             <tr>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->average}} %</td>
                                 <td>{{$item->dateExam}}</td>
                             </tr>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
@@ -144,7 +144,7 @@
     </div>
 </div>
 
-@php $i=0 @endphp
+{{-- @php $i=0 @endphp
 @foreach ($arrPrograms as $item)
     <input class="programs" type="hidden" value="{{$item}}">
 @endforeach
@@ -158,12 +158,12 @@
 @endforeach
 @foreach ($arrCounts as $item)
     <input class="counts" type="hidden" value="{{$item}}">
-@endforeach
-
+@endforeach --}}
+{{--
 <input id="passed" type="hidden" value="{{$passed}}">
-<input id="failed" type="hidden" value="{{$failed}}">
+<input id="failed" type="hidden" value="{{$failed}}"> --}}
 
-<script>
+{{-- <script>
     var p = document.getElementById("passed").value;
     var f = document.getElementById("failed").value;
     var ctx = document.getElementById("passing").getContext('2d');
@@ -181,52 +181,6 @@
     });
 </script>
 
-<script>
-    var i;
-    var c = document.getElementsByClassName("dates").length
-
-    var arrDate = [];
-    var arrCount = [];
-
-    for (i = 0; i < c; i++)
-    {
-        var d = document.getElementsByClassName("dates")[i].value;
-        arrDate.push(d);
-
-        var count = document.getElementsByClassName("counts")[i].value;
-        arrCount.push(count);
-    }
-
-    console.log(arrCount);
-
-    var ctx = document.getElementById('datesChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: arrDate,
-            datasets: [{
-                label: '# of Examinees',
-                data: arrCount,
-                backgroundColor: [
-                    'rgba(0,33,78,0.5)'
-                ],
-                borderColor: [
-                    '#00214E'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        precision: 0,
-                    }
-                }]
-            }
-        }
-    });
-</script>
 
 
 <script type="text/javascript">
@@ -241,12 +195,15 @@
     .css({ 'width': '160px', 'display': 'inline-block' });
 
 });
-</script>
+</script> --}}
 
-<script src="{{ secure_asset('js/admin.js') }}" defer></script>
-<script src="{{ asset('js/admin.js') }}" defer></script>
+{{-- <script src="{{ secure_asset('js/dashboard/preferredCourses.js') }}" defer></script> --}}
+{{-- <script src="{{ secure_asset('js/clock.js') }}" defer></script> --}}
 
-<script src="{{ secure_asset('js/clock.js') }}" defer></script>
+<script src="{{ asset('js/dashboard/preferredPrograms.js') }}"></script>
+<script src="{{ asset('js/dashboard/applicantsPassing.js') }}"></script>
+<script src="{{ asset('js/dashboard/examDates.js') }}"></script>
+
 <script src="{{ asset('js/clock.js') }}" defer></script>
 @endsection
 
