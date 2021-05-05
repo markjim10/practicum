@@ -17,16 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // REGISTER
 
-Route::post('getProvinces', 'MobileController@getProvinces');
-Route::post('getCities', 'MobileController@getCities');
-Route::post('getPrograms', 'MobileController@getPrograms');
-Route::post('mobile_register', 'MobileController@mobile_register');
+// Route::post('getProvinces', 'MobileController@getProvinces');
+// Route::post('getCities', 'MobileController@getCities');
+// Route::post('getPrograms', 'MobileController@getPrograms');
+// Route::post('mobile_register', 'MobileController@mobile_register');
 
-Route::post('android_home', 'AndroidController@index');
-Route::post('android_login', 'AndroidController@login');
-Route::post('android_register', 'AndroidController@register');
-Route::post('android_select_date', 'AndroidController@select_date');
-Route::post('android_exam_live', 'AndroidController@exam_live');
-Route::post('android_submit', 'AndroidController@submit');
-Route::post('android_show_result', 'AndroidController@result');
-Route::post('android_chat', 'AndroidController@chat');
+// Route::post('android_home', 'AndroidController@index');
+// Route::post('android_login', 'AndroidController@login');
+// Route::post('android_register', 'AndroidController@register');
+// Route::post('android_select_date', 'AndroidController@select_date');
+// Route::post('android_exam_live', 'AndroidController@exam_live');
+// Route::post('android_submit', 'AndroidController@submit');
+// Route::post('android_show_result', 'AndroidController@result');
+// Route::post('android_chat', 'AndroidController@chat');

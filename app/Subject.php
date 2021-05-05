@@ -7,33 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    public $timestamps = false;
-
     public function questions()
     {
         return $this->hasMany(Question::class);
     }
 
-    public static function createSubject($request)
+    public function createSubject($request)
     {
         $name = $request->subject_name;
         $num_questions = $request->num_questions;
 
         $subject = new Subject();
-        $subject->name = $name;
+        $subject->subject_name = $name;
         $subject->num_questions = $num_questions;
         $subject->save();
 
-        $subject = Subject::where('id', $subject->id)->first();
-
         for ($i = 0; $i < $num_questions; $i++) {
+
             $question = new Question();
             $question->subject_id = $subject->id;
             $question->save();
 
             for ($j = 0; $j < 4; $j++) {
                 $choice = new Choice();
-                $choice->subject_id = $subject->id;
                 $choice->question_id = $question->id;
                 $choice->save();
             }
@@ -41,31 +37,40 @@ class Subject extends Model
         Trails::saveTrails("Created subject \"" . $subject->name . "\"");
     }
 
-    public static function updateSubject($data)
+    public function getChoicesByQuestionId($questions)
     {
-        $q = Question::where('id', $data->id)->first();
-        $q->question = $data->question;
-        $q->answer = $data->choice1;
-        $q->save();
+        $question_id = array();
+        foreach ($questions as $question) {
+            array_push($question_id, $question->id);
+        }
 
-        $arr = array(
-            $data->choice1,
-            $data->choice2,
-            $data->choice3,
-            $data->choice4
+        return Choice::whereIn('question_id', $question_id)->orderBy('id', 'ASC')->get();
+    }
+
+    public function update_subject($request, $id)
+    {
+        $question = Question::where('id', $request->question_id)->first();
+        $question->question = $request->question;
+        $question->answer = $request->choice1;
+        $question->save();
+
+        $arrChoices = array(
+            $request->choice1,
+            $request->choice2,
+            $request->choice3,
+            $request->choice4
         );
 
-        $c = Choice::where('question_id', $data->id)->orderBy('id')->get();
+        $choices = Choice::where('question_id', $request->question_id)->orderBy('id')->get();
         $i = 0;
-
-        foreach ($c as $item) {
-            $item->choice = $arr[$i];
-            $item->save();
+        foreach ($choices as $choice) {
+            $choice->choice = $arrChoices[$i];
+            $choice->save();
             $i++;
         }
 
         $update_subject = true;
-        $questions = Question::where('subject_id', $data->subject)->get();
+        $questions = Question::where('subject_id', $id)->get();
 
         foreach ($questions as $item) {
             if ($item->answer == null) {
@@ -75,21 +80,18 @@ class Subject extends Model
         }
 
         if ($update_subject == true) {
-            $subject = Subject::where('id', $data->subject)->first();
+            $subject = Subject::where('id', $id)->first();
             $subject->status = 'approved';
-            Helper::saveTrails("Updated subject " . $subject->name);
             $subject->save();
         }
 
-        return $q->id;
+        return $question->id;
     }
 
-    public static function removeSubject($id)
+    public function remove_subject($id)
     {
         $subject = Subject::where('id', $id)->first();
         $subject->status = "removed";
         $subject->save();
-
-        Helper::saveTrails("Removed subject " . $subject->name);
     }
 }

@@ -7,7 +7,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-4">
-                    <label for="subject_name">Subject</label>
+                    <label for="subject_name">Subject Name</label>
                 </div>
                 <div class="col-8">
                 <input required type="text" class="form-control" name="subject_name" id="subject_name">
@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-        <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-primary">Submit</button>
         </div>
     </form>
 </div>

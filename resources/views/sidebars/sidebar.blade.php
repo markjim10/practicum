@@ -7,7 +7,7 @@
     <!-- ADMIN SIDEBAR -->
     @if(Auth::user()->role=='admin')
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">IT199R-2 Project</div>
+      <div class="sidebar-heading">Practicum Project</div>
       <div class="list-group list-group-flush">
 
         <a href="/"
@@ -19,12 +19,17 @@
         {{ Request::is('admins/applicants') ? 'active' : '' }}">
         <i class="fas fa-user-circle fa-2x auth" aria-hidden="true"></i> Applicants </a>
 
-        <a href="/admins/examination" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('admins/examination') ? 'active' : '' }}"  >
-            Examinations<i class='fas fa-laptop fa-2x auth'></i>
+        <a href="/exams" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('exams/index') ? 'active' : '' }}"  >
+            Exams<i class='fa fa-pencil-alt fa-2x auth'></i>
         </a>
 
-        <a href="/admins/chatbots/chatbot_home" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('admins/chatbots/chatbot_home') ? 'active' : '' }}">Chat Bot
-            <i class='fas fa-robot fa-2x auth'></i></a>
+        <a href="/subjects" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('subjects') ? 'active' : '' }}"  >
+            Subjects<i class='fas fa-laptop fa-2x auth'></i>
+        </a>
+
+        <a href="/admins/chatbots/chatbot_home" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('admins/chatbots/chatbot_home') ? 'active' : '' }}">
+            Chat Bot
+        <i class='fas fa-robot fa-2x auth'></i></a>
 
         <a href="/adminsfeedback" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('adminsfeedback') ? 'active' : '' }}">Feedbacks
             <i class='fas fa-envelope fa-2x auth'></i></a>
@@ -93,7 +98,7 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg navbar-dark site_bg border-bottom">
-        <button class="btn btn-secondary btn-sm" id="menu-toggle">Sidebar</button>
+        <button class="btn btn-primary btn-sm" id="menu-toggle">Sidebar</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

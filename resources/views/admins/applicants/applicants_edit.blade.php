@@ -16,7 +16,7 @@
             </h3>
             <hr>
             <div class="row">
-                <div class="first col-md-9">
+                <div class="col-md-9">
                     <b> Full Name: </b>{{$app->first_name}} {{$app->middle_name}} {{$app->last_name}}
                     <br>
                     <b> Email: </b>{{$app->user->email}}
@@ -40,45 +40,23 @@
                     <hr>
 
                     @if($app->appResult->status=="pending")
-
-                    <div class="form-group">
-                        <a href="/applicants/approved/{{$app->id}}" class="btn btn-success">Approve</a>
-                    </div>
-
-                    <div class="form-group">
-                    <a href="/applicants/denied/{{$app->id}}" class="btn btn-danger">Deny</a>
-                    </div>
+                        <div class="form-group">
+                            <a href="/applicants/approved/{{$app->id}}" class="btn btn-success">
+                                Approve</a>
+                        </div>
+                        <div class="form-group">
+                        <a href="/applicants/denied/{{$app->id}}" class="btn btn-danger">
+                            Deny</a>
+                        </div>
                     @endif
                 </div>
 
-                <div class="second col-md-3" >
+                <div class="col-md-3" >
                     <img class="photo" src="data:image;base64,{{$app->user->photo}}" width="100%" height="auto;" style="float:right"/>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
-
-<script>
-    $(window).resize(function() {
-
-    if ($(window).width() < 600) {
-        $(".second").addClass("order-first");
-        $(".second").css('text-align','center');
-        $(".photo").css({'width' : '100%'});
-    } else {
-        $(".second").removeClass("order-first");
-    }
-});
-</script>
-
-
 
 @endsection

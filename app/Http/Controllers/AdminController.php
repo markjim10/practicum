@@ -37,7 +37,10 @@ class AdminController extends Controller
 
     public function applicants()
     {
-        $applicants = Applicant::all();
+        $applicants = DB::table('applicants')
+            ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
+            ->get();
+
         return view('admins.applicants.applicants_home', compact('applicants'));
     }
 

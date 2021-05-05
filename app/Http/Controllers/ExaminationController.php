@@ -7,12 +7,16 @@ use App\Choice;
 use App\Subject;
 use App\ExamDate;
 use App\Question;
+use App\Services\ExaminationService;
 use Illuminate\Http\Request;
 
-class ExamAdminController extends Controller
+class ExaminationController extends Controller
 {
-    public function __construct()
+    protected $examinationService;
+
+    public function __construct(ExaminationService $examinationService)
     {
+        $this->examinationService = $examinationService;
         $this->middleware('admin');
     }
 
@@ -54,15 +58,15 @@ class ExamAdminController extends Controller
         }
     }
 
-    //--------- Subjects
+    // Subjects
 
     public function create_subject(Request $request)
     {
-        Subject::createSubject($request);
+        $this->examinationService->createSubject($request);
         return redirect()->back()->with('success', 'Successfully created a subject.');
     }
 
-    public function subject_show($id)
+    public function subjects($id)
     {
         $subject = Subject::where('id', $id)->first();
         $questions = Question::where('subject_id', $id)->orderBy('id', 'ASC')->get();

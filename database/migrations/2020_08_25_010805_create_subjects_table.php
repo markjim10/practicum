@@ -10,9 +10,10 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('subject_name');
             $table->integer('num_questions');
             $table->string('status')->default("pending");
+            $table->timestamps();
         });
     }
 

@@ -13,6 +13,7 @@ class CreateQuestionsTable extends Migration
             $table->integer('subject_id');
             $table->string('question')->nullable();
             $table->string('answer')->nullable();
+            $table->timestamps();
         });
     }
 

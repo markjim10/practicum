@@ -58,7 +58,11 @@ class DashboardService
             return DB::table('applicants')
                 ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
                 ->get();
-        } else if ($status == 'pending') {
+        } else {
+            return DB::table('applicants')
+                ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
+                ->where('status', $status)
+                ->get();
         }
     }
 }

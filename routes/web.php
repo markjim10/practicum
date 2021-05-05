@@ -28,23 +28,23 @@ Route::get('/adminsfeedback', 'AdminController@feedbacks');
 Route::get('/remove_feedback/{id}', 'AdminController@remove_feedback');
 
 // ADMIN EXAMS CONTROLLER
-Route::get('/preview/{id}', 'ExamAdminController@preview');
-Route::get('/admins/examination', 'ExamAdminController@create');
-Route::post('/store_exam_date', 'ExamAdminController@store_exam_date');
-Route::get('/remove_exam_date/{data}', 'ExamAdminController@remove_exam_date');
-Route::get('/remove_exam/{id}', 'ExamAdminController@remove_exam');
-Route::post('/create_subject', 'ExamAdminController@create_subject');
-Route::get('/subject_show/{id}', 'ExamAdminController@subject_show');
-Route::get('/update_subject/{data}', 'ExamAdminController@update_subject');
-Route::get('/subject_remove/{id}', 'ExamAdminController@subject_remove');
+// Route::get('/preview/{id}', 'ExaminationController@preview');
+// Route::get('/admins/examination', 'ExaminationController@create');
+// Route::post('/store_exam_date', 'ExaminationController@store_exam_date');
+// Route::get('/remove_exam_date/{data}', 'ExaminationController@remove_exam_date');
+// Route::get('/remove_exam/{id}', 'ExaminationController@remove_exam');
+// Route::post('/create_subject', 'ExaminationController@create_subject');
+// Route::get('/subjects/{id}', 'ExaminationController@subjects');
+// Route::get('/update_subject/{data}', 'ExaminationController@update_subject');
+// Route::get('/subject_remove/{id}', 'ExaminationController@subject_remove');
 
 // CREATE EXAM
-Route::post('/create_exam', 'ExamAdminController@create_exam');
+Route::post('/create_exam', 'ExaminationController@create_exam');
 
 // ADMIN APPLICANTS CONTROLLER
-Route::get('/admins/applicants', 'AdminController@applicants');
-Route::get('/admins/applicants/edit/{id}', 'AdminController@applicants_edit');
-Route::get('/applicants/{status}/{id}', 'AdminController@applicants_status');
+// Route::get('/admins/applicants', 'AdminController@applicants');
+// Route::get('/admins/applicants/edit/{id}', 'AdminController@applicants_edit');
+// Route::get('/applicants/{status}/{id}', 'AdminController@applicants_status');
 
 // APPLICANTS CONTROLLER
 Route::get('/applicants', 'ApplicantController@index');
@@ -69,13 +69,11 @@ Route::post('/registerUser', 'SysAdminController@registerUser');
 Route::post('/update_user', 'SysAdminController@update_user');
 Route::get('/remove_user/{id}', 'SysAdminController@remove_user');
 
-
 // GENERATE DATA
 Route::get('/generate', 'GenerateController@index');
 Route::post('/generate', 'GenerateController@generate_applicants');
 Route::get('/approve', 'GenerateController@approve');
 Route::get('/createSubject', 'GenerateController@createSubject');
-
 
 // CHAT BOT CONTROLLER
 Route::get('/admins/chatbots/chatbot_home', 'ChatBotController@index');
@@ -93,9 +91,9 @@ Route::get('exportUsers', 'ExportExcelController@exportUsers');
 Route::get('exportApplicants', 'ExportExcelController@exportApplicants');
 Route::get('exportAppResults', 'ExportExcelController@exportAppResults');
 
-Route::post('import_users', 'ImportExcelController@import_applicants');
-Route::post('import_applicants', 'ImportExcelController@import_applicants');
-Route::post('import_results', 'ImportExcelController@import_results');
+// Route::post('import_users', 'ImportExcelController@import_applicants');
+// Route::post('import_applicants', 'ImportExcelController@import_applicants');
+// Route::post('import_results', 'ImportExcelController@import_results');
 
 // REPORTS
 Route::get('programs_report', 'ReportsController@programs_report');
@@ -131,3 +129,15 @@ Route::get('/get_application/{id}', 'RegisterController@get_application');
 
 // APPLICANTS CONTROLLER
 Route::get('selectApplicantsByStatus/{status}', 'AdminController@selectApplicantsByStatus');
+Route::get('/admins/applicants/edit/{id}', 'AdminController@applicants_edit');
+
+Route::get('/admins/applicants', 'AdminController@applicants');
+
+
+
+// SubjectController
+Route::resource('subjects', 'SubjectController');
+Route::put('/subjects/remove/{id}', 'SubjectController@remove_subject');
+
+// ExamController
+Route::resource('exams', 'ExamController');

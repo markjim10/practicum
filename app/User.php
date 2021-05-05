@@ -69,7 +69,6 @@ class User extends Authenticatable
             $admin->save();
 
             $trail = "Created new user " . $username . " as " . $role;
-            Helper::saveTrails($trail);
 
             return 'Successfully created new user';
         }

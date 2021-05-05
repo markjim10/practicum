@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <hr class="site_hr">
+    <hr>
     <canvas id="datesChart" height="20vh" width="80vw"></canvas>
 
     <div class="row mt-5">

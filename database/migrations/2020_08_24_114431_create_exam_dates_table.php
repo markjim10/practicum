@@ -16,6 +16,7 @@ class CreateExamDatesTable extends Migration
             $table->string('exam_start');
             $table->string('exam_end');
             $table->string('exam_type');
+            $table->integer('total_examinees');
         });
     }
 

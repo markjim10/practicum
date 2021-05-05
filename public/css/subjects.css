@@ -1,0 +1,12 @@
+table a {
+    color: #007bff !important;
+}
+
+table a:hover {
+    color: #00214e !important;
+}
+
+.status {
+    font-weight: bold;
+    text-transform: capitalize;
+}

@@ -2,7 +2,7 @@
 @include('layouts.navbar')
 @section('content')
 <div class="container mt-5">
-    <h1 class="site_font">Entrance Examination and Registration System</h1>
+    <h1 class="">Entrance Examination and Registration System</h1>
     <hr>
     <div class="row">
 
