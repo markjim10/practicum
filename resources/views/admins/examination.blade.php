@@ -56,12 +56,12 @@
             @include('admins.exams.component_date_table') <br>
         </div>
     </div>
-<script>
+{{-- <script>
     $( function() {
         $( "#exam_date" ).datepicker({
             minDate: 0,
         });
     });
-</script>
+</script> --}}
 
 @endsection

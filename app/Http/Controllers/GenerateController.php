@@ -35,8 +35,9 @@ class GenerateController extends Controller
         $num_questions = 10;
 
         $subject = new Subject();
-        $subject->name = $name;
+        $subject->subject_name = $name;
         $subject->num_questions = $num_questions;
+        $subject->status = "approved";
         $subject->save();
 
         $subject = Subject::where('id', $subject->id)->first();
@@ -50,7 +51,6 @@ class GenerateController extends Controller
 
             for ($j = 0; $j < 4; $j++) {
                 $choice = new Choice();
-                $choice->subject_id = $subject->id;
                 $choice->question_id = $question->id;
                 $choice->choice = $question->answer + $j;
                 $choice->save();

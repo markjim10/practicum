@@ -11,7 +11,12 @@ class CreateExamsTable extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('exam_name');
-            $table->string('status')->default("available");
+            $table->string('exam_status')->default("activated");
+            $table->string('exam_date');
+            $table->string('exam_start');
+            $table->string('exam_end');
+            $table->string('exam_type');
+            $table->integer('total_examinees')->default(0);
             $table->timestamps();
         });
     }

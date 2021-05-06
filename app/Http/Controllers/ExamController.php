@@ -20,42 +20,35 @@ class ExamController extends Controller
     public function index()
     {
         $subjects = Subject::where('status', '!=', 'removed')->get();
-        $dates = ExamDate::getAvailableDates();
         $exams = Exam::all();
 
         return view('exams.index', compact('subjects', 'dates', 'exams'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $response = $this->exam->create($request);
+        $response = json_decode($response->getContent());
+        return redirect()->back()->with($response->result, $response->message);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $subjects = $this->exam->getExamSubjects($id);
+        $questions = $this->exam->getExamQuestions($subjects);
+        $choices = $this->exam->getExamChoices($questions);
+        $exam = Exam::where('id', $id)->first();
+        return view('exams.show', compact(
+            'exam',
+            'subjects',
+            'questions',
+            'choices'
+        ));
     }
 
     /**

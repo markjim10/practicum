@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered">
+    <table id="subjectsTable" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Subject</th>
@@ -30,7 +30,7 @@
 </div>
 
 <script>
-    $('.table').DataTable({
+    $('table').DataTable({
 
     });
 </script>
