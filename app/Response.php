@@ -18,7 +18,7 @@ class Response extends Model
         return $this->words->count();
     }
 
-    public static function createResponse($request)
+    public function createResponse($request)
     {
         $res = new Response();
         $res->response = $request->response;

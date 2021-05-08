@@ -21,7 +21,7 @@ class SubjectController extends Controller
 
     public function index()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::where('status', '!=', 'removed')->get();
         return view('subjects.index', compact('subjects'));
     }
 
@@ -57,7 +57,8 @@ class SubjectController extends Controller
 
     public function remove($id)
     {
-        return $this->subject->remove_subject($id);
+        $this->subject->remove_subject($id);
+        return redirect('/subjects');
     }
 
     public function destroy($id)

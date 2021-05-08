@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Middleware\Applicant;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
@@ -55,12 +56,9 @@ class DashboardService
     public function selectApplicantsByStatus($status)
     {
         if ($status == 'total') {
-            return DB::table('applicants')
-                ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
-                ->get();
+            return DB::table('applicants')->get();
         } else {
             return DB::table('applicants')
-                ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
                 ->where('status', $status)
                 ->get();
         }

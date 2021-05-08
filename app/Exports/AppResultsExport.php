@@ -9,11 +9,6 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class AppResultsExport implements FromCollection, WithStrictNullComparison
 {
-    // public function collection()
-    // {
-    //     return AppResult::all();
-    // }
-
     public function collection()
     {
         Trails::saveTrails("Downloaded AppResult Table");
@@ -32,8 +27,7 @@ class AppResultsExport implements FromCollection, WithStrictNullComparison
                 'time_end' => openssl_encrypt($result->time_end, "AES-128-ECB", ''),
             ]);
         }
-        $c = collect($encryptedUsers);
-        return $c;
+        return collect($encryptedUsers);
     }
 
     public function startCell(): string

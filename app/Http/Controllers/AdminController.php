@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\AppExamResult;
 use App\User;
-use App\Admin;
 use App\Trails;
-use App\Subject;
-use App\ExamDate;
 use App\Feedback;
 use App\Applicant;
+use App\ApplicantExam;
 use App\AppResult;
-use App\UserAdmin;
-use App\AppExamResult;
 use App\Services\DashboardService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -37,11 +33,8 @@ class AdminController extends Controller
 
     public function applicants()
     {
-        $applicants = DB::table('applicants')
-            ->join('app_results', 'applicants.id', '=', 'app_results.applicant_id')
-            ->get();
-
-        return view('admins.applicants.applicants_home', compact('applicants'));
+        $applicants = DB::table('applicants')->get();
+        return view('admins.applicants', compact('applicants'));
     }
 
     public function selectApplicantsByStatus($status)
@@ -53,40 +46,43 @@ class AdminController extends Controller
     public function applicants_edit($id)
     {
         $app = Applicant::where('id', $id)->first();
-        return view('admins.applicants.applicants_edit', compact('app'));
+        return view('admins.applicants_edit', compact('app'));
     }
 
     public function applicants_status($status, $id)
     {
-        $appResult = AppResult::where('applicant_id', $id)->first();
-        $appResult->status = $status;
-        $appResult->save();
-
         $applicant = Applicant::where('id', $id)->first();
-        $user = User::where('id', $applicant->user_id)->first();
+        $applicant->status = $status;
+        $applicant->save();
+
+        $appExam = new ApplicantExam();
+        $appExam->applicant_id = $id;
+        $appExam->save();
+
+        $user = User::where('id', $id)->first();
         $user->password = Hash::make('changeme');
         $user->save();
 
-        if ($status == "approved") {
-            Mail::raw([], function ($message) use ($user) {
-                $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
-                $message->to($user->email);
-                $message->subject('Your application in the OJT 2 Project entrance exam has been approved');
-                $message->setBody('<h2>You have been approved and can now log in your account by using your email address, and "changeme" for your password.</h2>', 'text/html');
-            });
-        } else {
-            Mail::raw([], function ($message) use ($user) {
-                $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
-                $message->to($user->email);
-                $message->subject('Your application in the OJT 2 Project entrance exam has been denied');
-                $message->setBody('<h2>Sorry you have been denied.</h2>', 'text/html');
-            });
-        }
+        // if ($status == "approved") {
+        //     Mail::raw([], function ($message) use ($user) {
+        //         $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
+        //         $message->to($user->email);
+        //         $message->subject('Your application in the OJT 2 Project entrance exam has been approved');
+        //         $message->setBody('<h2>You have been approved and can now log in your account by using your email address, and "changeme" for your password.</h2>', 'text/html');
+        //     });
+        // } else {
+        //     Mail::raw([], function ($message) use ($user) {
+        //         $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
+        //         $message->to($user->email);
+        //         $message->subject('Your application in the OJT 2 Project entrance exam has been denied');
+        //         $message->setBody('<h2>Sorry you have been denied.</h2>', 'text/html');
+        //     });
+        // }
 
         $trail = "Updated applicant \"" .  $user->email . "\" to " . $status;
         Trails::saveTrails($trail);
 
-        return redirect()->back()->with('message', 'applicant updated.');
+        return redirect()->back()->with('message', 'Applicant Updated.');
     }
 
     public function feedbacks()

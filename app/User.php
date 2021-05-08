@@ -39,7 +39,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function createNewUser(Request $request)
+    public function registerAdmin(Request $request)
     {
         $username = $request->username;
         $name = $request->name;
@@ -50,12 +50,25 @@ class User extends Authenticatable
 
         $user = User::where('email', $email)->orWhere('username', $username)->first();
         if ($user) {
-            return 'Email/Username is not available';
+            return response()
+                ->json([
+                    'result' => 'error',
+                    'message' => 'Email/Username is not available'
+                ]);
         } else if (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $password)) {
-            return 'Password must contain letters and numbers';
+            return response()
+                ->json([
+                    'result' => 'error',
+                    'message' => 'Password must contain letters and numbers'
+                ]);
         } else if ($password != $confirm) {
-            return 'Passwords do not match';
+            return response()
+                ->json([
+                    'result' => 'error',
+                    'message' => 'Passwords do not match'
+                ]);
         } else {
+
             $user = new User();
             $user->username = $username;
             $user->email = $email;
@@ -68,9 +81,12 @@ class User extends Authenticatable
             $admin->name = $name;
             $admin->save();
 
-            $trail = "Created new user " . $username . " as " . $role;
-
-            return 'Successfully created new user';
+            Trails::saveTrails("Created new user " . $username . " as " . $role);
+            return response()
+                ->json([
+                    'result' => 'success',
+                    'message' => 'Successfully created a new user'
+                ]);
         }
     }
 }

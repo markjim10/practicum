@@ -2,8 +2,8 @@
 
 namespace App;
 
-use stdClass;
 use Carbon\Carbon;
+use App\ExamSubject;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,7 +54,7 @@ class Exam extends Model
 
         $subjects = $request->subject;
         foreach ($subjects as $subject) {
-            $exam_subject = new Exam_Subject();
+            $exam_subject = new ExamSubject();
             $exam_subject->exam_id = $exam->id;
             $exam_subject->subject_id = $subject;
             $exam_subject->save();
@@ -75,9 +75,9 @@ class Exam extends Model
 
     public function getExamSubjects($id)
     {
-        return  DB::table('exam__subjects')
-            ->join('subjects', 'exam__subjects.subject_id', '=', 'subjects.id')
-            ->where('exam__subjects.exam_id', '=', $id)
+        return  DB::table('exam_subjects')
+            ->join('subjects', 'exam_subjects.subject_id', '=', 'subjects.id')
+            ->where('exam_subjects.exam_id', '=', $id)
             ->get();
     }
 

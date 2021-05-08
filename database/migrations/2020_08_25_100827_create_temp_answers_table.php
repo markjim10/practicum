@@ -13,6 +13,7 @@ class CreateTempAnswersTable extends Migration
             $table->integer('applicant_id');
             $table->integer('question_id');
             $table->string('temp_answer')->nullable();
+            $table->timestamps();
         });
     }
 

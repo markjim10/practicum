@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <div class="row">
                         <div class="col-md-4">
                             <label for="brgy">Barangay <span>*</span></label>
@@ -104,7 +104,7 @@
                         <input type="text" class="form-control" spellcheck="false" class="form-control" name="brgy" id="brgy" required/>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <div class="row">

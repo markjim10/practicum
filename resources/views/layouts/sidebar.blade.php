@@ -12,27 +12,27 @@
 
         <a href="/"
         class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('admins') ? 'active' : '' }}">
-        <i class="fas fa-home fa-2x auth" aria-hidden="true"></i> Dashboard </a>
+        <i class="fas fa-home fa-lg auth" aria-hidden="true"></i> Dashboard </a>
 
         <a href="/admins/applicants"
         class="side list-group-item list-group-item-light list-group-item-action
         {{ Request::is('admins/applicants') ? 'active' : '' }}">
-        <i class="fas fa-user-circle fa-2x auth" aria-hidden="true"></i> Applicants </a>
+        <i class="fas fa-user-circle fa-lg auth" aria-hidden="true"></i> Applicants </a>
 
-        <a href="/exams" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('exams/index') ? 'active' : '' }}"  >
-            Exams<i class='fa fa-pencil-alt fa-2x auth'></i>
+        <a href="/exams" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('exams') ? 'active' : '' }}"  >
+            Exams<i class='fa fa-pencil-alt fa-lg auth'></i>
         </a>
 
         <a href="/subjects" class="side list-group-item list-group-item-light list-group-item-action {{ Request::is('subjects') ? 'active' : '' }}"  >
-            Subjects<i class='fas fa-laptop fa-2x auth'></i>
+            Subjects<i class='fas fa-laptop fa-lg auth'></i>
         </a>
 
-        <a href="/admins/chatbots/chatbot_home" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('admins/chatbots/chatbot_home') ? 'active' : '' }}">
+        <a href="/responses" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('responses') ? 'active' : '' }}">
             Chat Bot
-        <i class='fas fa-robot fa-2x auth'></i></a>
+        <i class='fas fa-robot fa-lg auth'></i></a>
 
-        <a href="/adminsfeedback" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('adminsfeedback') ? 'active' : '' }}">Feedbacks
-            <i class='fas fa-envelope fa-2x auth'></i></a>
+        {{-- <a href="/adminsfeedback" class="side list-group-item list-group-item-light list-group-item-action  {{ Request::is('adminsfeedback') ? 'active' : '' }}">Feedbacks
+            <i class='fas fa-envelope fa-lg auth'></i></a> --}}
       </div>
     </div>
     @endif
@@ -46,22 +46,17 @@
         <a href="/"
         class="side list-group-item list-group-item-light list-group-item-action
         {{ Request::is('sysadmins') ? 'active' : '' }}">
-        <i class="fas fa-home fa-2x auth"></i> Dashboard </a>
+        <i class="fas fa-home fa-lg auth"></i> Dashboard </a>
 
-        <a href="/view_users"
+        <a href="/sysadmins/database"
         class="side list-group-item list-group-item-light list-group-item-action
-        {{ Request::is('view_users') ? 'active' : '' }}">
-        <i class="fas fa-user fa-2x auth"></i> Register User</a>
+        {{ Request::is('sysadmins/database') ? 'active' : '' }}">
+        <i class='fas fa-database fa-lg auth'></i>Database</a>
 
-        <a href="/view_database"
+        <a href="/sysadmins/trails"
         class="side list-group-item list-group-item-light list-group-item-action
-        {{ Request::is('view_database') ? 'active' : '' }}">
-        <i class='fas fa-database fa-2x auth'></i>Database</a>
-
-        <a href="/view_trails"
-        class="side list-group-item list-group-item-light list-group-item-action
-        {{ Request::is('view_trails') ? 'active' : '' }}">
-        <i class='fas fa-sticky-note fa-2x auth'></i>Trail Logs</a>
+        {{ Request::is('sysadmins/trails') ? 'active' : '' }}">
+        <i class='fas fa-sticky-note fa-lg auth'></i>Trail Logs</a>
       </div>
     </div>
     @endif
@@ -74,22 +69,17 @@
         <a href="/"
         class="side list-group-item list-group-item-light list-group-item-action
         {{ Request::is('applicants') ? 'active' : '' }}">
-        <i class="fas fa-home fa-2x auth" aria-hidden="true"></i> Home</a>
+        <i class="fas fa-home fa-lg auth" aria-hidden="true"></i> Home</a>
 
         <a href="/applicants/exam_results"
         class="side list-group-item list-group-item-light list-group-item-action
         {{ Request::is('applicants/exam_results') ? 'active' : '' }}">
-        <i class="fa fa-book fa-2x auth" aria-hidden="true"></i> Exam Results</a>
+        <i class="fa fa-book fa-lg auth" aria-hidden="true"></i> Exam Results</a>
 
         <a href="/applicants/profile"
         class="side list-group-item list-group-item-light list-group-item-action
         {{ Request::is('applicants/profile') ? 'active' : '' }}">
-        <i class="fas fa-user-circle fa-2x auth" aria-hidden="true"></i> Applicant Profile</a>
-
-        <a href="/applicants/send_feedback"
-        class="side list-group-item list-group-item-light list-group-item-action
-        {{ Request::is('applicants/send_feedback') ? 'active' : '' }}">
-        <i class="fas fa-envelope fa-2x auth" aria-hidden="true"></i> Send Feedbacks</a>
+        <i class="fas fa-user-circle fa-lg auth" aria-hidden="true"></i> Applicant Profile</a>
 
       </div>
     </div>
@@ -115,7 +105,7 @@
                 Logged in as {{ Auth::user()->username }}
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/editProfile/{{ Auth::user()->id }}">Edit Profile</a>
+                <a class="dropdown-item" href="/edit_profile/{{ Auth::user()->id }}">Edit Profile</a>
 
                 <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}"

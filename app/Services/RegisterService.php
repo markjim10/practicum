@@ -5,7 +5,6 @@ namespace App\Services;
 use App\User;
 use App\Applicant;
 use App\AppResult;
-use Illuminate\Http\Request;
 use Coreproc\MsisdnPh\Msisdn;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +44,7 @@ class RegisterService
     public static function registerApplicant($request)
     {
         $email = request('email_address');
-        $password = Hash::make('changeme');
+        $password = Hash::make('1234');
         $dateOfBirth = request('birth_month') . ' ' . request('birth_day') . ' ' . request('birth_year');
         $province = DB::table('philippine_provinces')
             ->where('province_code', request('province'))
@@ -69,9 +68,9 @@ class RegisterService
         $applicant->first_name = request('first_name');
         $applicant->last_name = request('last_name');
         $applicant->middle_name = request('middle_name');
+        $applicant->status = 'pending';
         $applicant->province = $province;
         $applicant->city = request('city');
-        $applicant->brgy = request('brgy');
         $applicant->phone = request('phone');
         $applicant->date_of_birth = $dateOfBirth;
         $applicant->application = request('application');

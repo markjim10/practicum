@@ -52,18 +52,12 @@ class ExaminationController extends Controller
     public function store_exam_date(Request $request)
     {
         if (Exam::createExamDate($request)) {
-            return redirect()->back()->with('success', 'Successfully created an Examination Date.');
+            return redirect()->back()
+                ->with('success', 'Successfully created an Examination Date.');
         } else {
-            return redirect()->back()->with('errors', 'The date you entered had already passed.');
+            return redirect()->back()
+                ->with('errors', 'The date you entered had already passed.');
         }
-    }
-
-    // Subjects
-
-    public function create_subject(Request $request)
-    {
-        $this->examinationService->createSubject($request);
-        return redirect()->back()->with('success', 'Successfully created a subject.');
     }
 
     public function subjects($id)

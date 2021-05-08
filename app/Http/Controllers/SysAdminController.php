@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SysAdminController extends Controller
 {
-    public function __construct()
+    protected $user;
+
+    public function __construct(User $user)
     {
+        $this->user = $user;
         $this->middleware('sysadmin');
     }
 
@@ -23,62 +26,45 @@ class SysAdminController extends Controller
         return view('sysadmins.index', compact('users', 'admin'));
     }
 
-    public function view_users()
+    public function register_user(Request $request)
     {
-        return view('sysadmins.registerUser');
+        $response = $this->user->registerAdmin($request);
+        $response = json_decode($response->getContent());
+        return redirect()->back()->with($response->result, $response->message);
     }
 
-    public function registerUser(Request $request)
+    public function edit($id)
     {
-        $message = User::createNewUser($request);
-
-        if ($message == "Email/Username is not available") {
-            return redirect()->back()->with('error', $message);
-        } else if ($message == "Passwords do not match") {
-            return redirect()->back()->with('error', $message);
-        } else if ($message == "Password must contain letters and numbers") {
-            return redirect()->back()->with('error', $message);
-        } else {
-            return redirect()->back()->with('message', $message);
-        }
+        return User::where('id', $id)->first();
     }
 
-    public function view_database()
-    {
-        return view('sysadmins.view_database');
-    }
-
-    public function view_trails()
-    {
-        $trails = Trails::orderBy('id', 'DESC')->get();
-        return view('sysadmins.view_trails', compact('trails'));
-    }
-
-    public function remove_user($id)
-    {
-        $user = User::where('id', $id)->first();
-        $trail = "Removed user " . $user->username;
-
-        $user->delete();
-
-        $users = User::where('role', '!=', 'applicant')->get();
-        return view('sysadmins.index', compact('users'));
-    }
-
-    public function edit_user($id)
-    {
-        $user = User::where('id', $id)->first();
-        return view('sysadmins.edit', compact('user'));
-    }
-
-    public function update_user(Request $request)
+    public function update(Request $request)
     {
         $user = User::where('id', $request->id)->first();
         $user->role = $request->role;
         $user->save();
 
-        $trail = "Updated user " . $user->username . " as " . $user->role;
+        Trails::saveTrails("Updated user " . $user->username . " as " . $user->role);
+        return redirect()->back()->with('message', 'User updated');
+    }
 
-        return redirect()->back()->with('message', 'User updated.');
+    public function delete(Request $request)
+    {
+        $user = User::where('id', $request->id)->first();
+        $user->delete();
+
+        Trails::saveTrails("Removed user " . $user->username);
+        return redirect()->back()->with('message', 'User deleted');
+    }
+
+    public function database()
+    {
+        return view('sysadmins.database');
+    }
+
+    public function trails()
+    {
+        $trails = Trails::orderBy('id', 'DESC')->get();
+        return view('sysadmins.trails', compact('trails'));
     }
 }

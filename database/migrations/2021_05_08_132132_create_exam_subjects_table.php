@@ -8,7 +8,7 @@ class CreateExamSubjectsTable extends Migration
 {
     public function up()
     {
-        Schema::create('exam__subjects', function (Blueprint $table) {
+        Schema::create('exam_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('exam_id');
             $table->integer('subject_id');
@@ -16,8 +16,13 @@ class CreateExamSubjectsTable extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
-        Schema::dropIfExists('exam__subjects');
+        Schema::dropIfExists('exam_subjects');
     }
 }

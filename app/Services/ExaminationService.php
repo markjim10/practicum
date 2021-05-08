@@ -2,40 +2,66 @@
 
 namespace App\Services;
 
+use App\Exam;
+use stdClass;
 use App\Choice;
 use App\Trails;
 use App\Subject;
 use App\Question;
+use Carbon\Carbon;
+use App\ApplicantExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExaminationService
 {
-    public function createSubject($request)
+    public function getAvailableExams($application)
     {
-        $name = $request->subject_name;
-        $num_questions = $request->num_questions;
+        return Exam::where('exam_end', '>', Carbon::now())
+            ->orderBy('exam_date', 'asc')
+            ->where('exam_type', $application)->get();
+    }
 
-        $subject = new Subject();
-        $subject->name = $name;
-        $subject->num_questions = $num_questions;
-        $subject->save();
+    public function yourExam($id)
+    {
+        $exam = DB::table('applicant_exams')
+            ->select('exams.id')
+            ->join('exams', 'exams.id', '=', 'applicant_exams.exam_id')
+            ->join('applicants', 'applicants.id', '=', 'applicant_exams.applicant_id')
+            ->where('applicants.id', $id)
+            ->first();
 
-        $subject = Subject::where('id', $subject->id)->first();
-
-        for ($i = 0; $i < $num_questions; $i++) {
-            $question = new Question();
-            $question->subject_id = $subject->id;
-            $question->save();
-
-            for ($j = 0; $j < 4; $j++) {
-                $choice = new Choice();
-                $choice->subject_id = $subject->id;
-                $choice->question_id = $question->id;
-                $choice->save();
-            }
+        if ($exam != null) {
+            return Exam::where('id', $exam->id)->first();
+        } else {
+            return $exam;
         }
+    }
 
-        Trails::saveTrails("Created subject \"" . $subject->name . "\"");
+    public function examStatus($yourExam)
+    {
+        $examStatus = new stdClass();
+
+        $start = Carbon::parse($yourExam->exam_start);
+        $end = Carbon::parse($yourExam->exam_end);
+        $now = Carbon::now();
+
+        $examStatus->isDatePassed = $now->greaterThan($end);
+        $examStatus->isExamLive = $now->between($start, $end);
+
+        return $examStatus;
+
+        // $isDatePassed = "";
+        // $isExamLive = "";
+        // $yourExam = ExamDate::where('id', $app->appResult->exam_date)->first();
+        // if ($yourExam != null) {
+        //     $start = $yourExam->exam_start;
+        //     $start = Carbon::parse($start);
+        //     $end = $yourExam->exam_end;
+        //     $end = Carbon::parse($end);
+        //     $now = Carbon::now();
+        //     $isDatePassed = json_encode($now->greaterThan($end));
+        //     $isExamLive = json_encode(Carbon::now()->between($start, $end));
+        // }
     }
 }

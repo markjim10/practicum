@@ -7,6 +7,7 @@ use App\Choice;
 use App\Subject;
 use App\Question;
 use App\Applicant;
+use App\ApplicantExam;
 use App\AppResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class GenerateController extends Controller
 {
     public function index()
     {
-        return view('/generate/applicants');
+        return view('home.generate_app');
     }
 
     public function approve()
@@ -93,6 +94,17 @@ class GenerateController extends Controller
         return $school;
     }
 
+    public function generatePhone()
+    {
+        return "09" . rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9);
+    }
+
+    public function generateBday()
+    {
+        $bday = rand(1990, 2002) . "-" . rand(1, 12) . "-" . rand(1, 30);
+        return date("F d Y", strtotime($bday));
+    }
+
     public function generate_applicants(Request $request)
     {
         $total = 0;
@@ -133,14 +145,13 @@ class GenerateController extends Controller
 
             $app = new Applicant();
             $app->user_id = $user->id;
+            $app->status = 'approved';
             $app->first_name = $firstName[$rand[0]];
             $app->middle_name = $lastName[$rand[1]];
             $app->last_name = $lastName[$rand[2]];
-
             $province = DB::table('philippine_provinces')
                 ->where('philippine_provinces.id', '=', $rand[3])
                 ->value('province_description');
-
             $city = DB::table('philippine_cities')
                 ->join('philippine_provinces', 'philippine_provinces.province_code', '=', 'philippine_cities.province_code')
                 ->where('philippine_provinces.id', '=', $rand[3])
@@ -148,11 +159,8 @@ class GenerateController extends Controller
 
             $app->province = $province;
             $app->city = $city;
-            $app->brgy = "Brgy. " . $city . " " . $province;
-            $app->phone = "09" . rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9) .  rand(0, 9);
-
-            $bday = rand(1990, 2002) . "-" . rand(1, 12) . "-" . rand(1, 30);
-            $app->date_of_birth = date("F d Y", strtotime($bday));
+            $app->phone = $this->generatePhone();
+            $app->date_of_birth = $this->generateBday();
 
             $program = DB::table('programs')
                 ->where('programs.id', '=', $rand[6])
@@ -169,7 +177,6 @@ class GenerateController extends Controller
             }
 
             $app->program_id = $program;
-
             $app->school_last_attended = $this->generateSchool();
 
             if ($request->hasFile('card_photo')) {
@@ -180,9 +187,8 @@ class GenerateController extends Controller
 
             $app->save();
 
-            $appResult = new AppResult();
+            $appResult = new ApplicantExam();
             $appResult->applicant_id = $app->id;
-            $appResult->status = "approved";
             $appResult->save();
         }
         return redirect()->back()->with('message', 'Applicant generated.');

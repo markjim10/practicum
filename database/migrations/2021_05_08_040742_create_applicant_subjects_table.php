@@ -4,11 +4,16 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAppExamResultsTable extends Migration
+class CreateApplicantSubjectsTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('app_exam_results', function (Blueprint $table) {
+        Schema::create('applicant_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('applicant_id');
             $table->integer('subject_id');
@@ -18,8 +23,13 @@ class CreateAppExamResultsTable extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
-        Schema::dropIfExists('app_exam_results');
+        Schema::dropIfExists('applicant_subjects');
     }
 }

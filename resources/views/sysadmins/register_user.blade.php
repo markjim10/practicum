@@ -1,18 +1,16 @@
-@extends('layouts.app')
-@extends('sidebars.sidebar')
-@section('admin')
+{{--
 
-<style>
-@media screen and (max-width: 768px) {
-    .card {
-        width: 100% !important;
-    }
-}
-</style>
+
+
+
+
+@extends('layouts.app')
+@extends('layouts.sidebar')
+@section('admin')
 
 <div class="container-fluid mt-3 mb-5">
     <h2>Register User</h2>
-    <hr class="site_hr">
+    <hr>
 
     @if(session()->has('message'))
         <div class="alert alert-success">
@@ -27,12 +25,11 @@
     @endif
 
     <div class="row justify-content-center">
-    <div class="card" style="width:60%">
+    <div class="card">
         <div class="card-header">Register</div>
         <div class="card-body">
-            <form action="/registerUser" method="POST">
+            <form action="/register_user" method="POST">
             @csrf
-
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-4">
@@ -113,4 +110,4 @@
 </div>
 
 @endsection
-
+ --}}

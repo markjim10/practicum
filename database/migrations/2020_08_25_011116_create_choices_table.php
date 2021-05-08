@@ -12,6 +12,7 @@ class CreateChoicesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('question_id');
             $table->string('choice')->nullable();
+            $table->timestamps();
         });
     }
 

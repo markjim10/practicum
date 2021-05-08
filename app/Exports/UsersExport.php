@@ -24,7 +24,6 @@ class UsersExport implements FromCollection
                 'role' => openssl_encrypt($user->role, "AES-128-ECB", ''),
             ]);
         }
-        $c = collect($encryptedUsers);
-        return $c;
+        return collect($encryptedUsers);
     }
 }

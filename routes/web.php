@@ -51,7 +51,7 @@ Route::get('/applicants', 'ApplicantController@index');
 Route::get('/applicants/profile', 'ApplicantController@profile');
 Route::get('/applicants/exam_results', 'ApplicantController@exam_results');
 Route::get('/applicants/send_feedback', 'ApplicantController@send_feedback');
-Route::post('/select_date', 'ApplicantController@select_date');
+// Route::post('/select_date', 'ApplicantController@select_date');
 Route::get('/exam_live', 'ApplicantController@exam_live');
 Route::get('/isDatePassed', 'ApplicantController@isDatePassed');
 Route::post('/exam_submit', 'ApplicantController@exam_submit');
@@ -59,31 +59,21 @@ Route::get('/update_temp_answer/{data}', 'ApplicantController@update_temp_answer
 
 Route::post('/send-feedback', 'ApplicantController@store_feedback');
 
-// SYSADMIN CONTROLLER
-Route::get('/sysadmins', 'SysAdminController@index');
-Route::get('/view_users', 'SysAdminController@view_users');
-Route::get('/view_database', 'SysAdminController@view_database');
-Route::get('/view_trails', 'SysAdminController@view_trails');
-Route::get('/edit_user/{id}', 'SysAdminController@edit_user');
-Route::post('/registerUser', 'SysAdminController@registerUser');
-Route::post('/update_user', 'SysAdminController@update_user');
-Route::get('/remove_user/{id}', 'SysAdminController@remove_user');
-
 // GENERATE DATA
 Route::get('/generate', 'GenerateController@index');
 Route::post('/generate', 'GenerateController@generate_applicants');
 Route::get('/approve', 'GenerateController@approve');
-Route::get('/createSubject', 'GenerateController@createSubject');
+Route::get('/generateSubject', 'GenerateController@createSubject');
 
 // CHAT BOT CONTROLLER
-Route::get('/admins/chatbots/chatbot_home', 'ChatBotController@index');
-Route::get('/chatbot/{message}', 'ChatBotController@message');
-Route::get('/admins/chatbots/chatbot_response/{id}', 'ChatBotController@create');
-Route::post('/create_word', 'ChatBotController@create_word');
-Route::post('/remove_word', 'ChatBotController@remove_word');
-Route::post('/create_response', 'ChatBotController@create_response');
-Route::post('/update_response', 'ChatBotController@update_response');
-Route::post('/remove_response', 'ChatBotController@remove_response');
+// Route::get('/admins/chatbots/chatbot_home', 'ChatBotController@index');
+// Route::get('/chatbot/{message}', 'ChatBotController@message');
+// Route::get('/admins/chatbots/chatbot_response/{id}', 'ChatBotController@create');
+// Route::post('/create_word', 'ChatBotController@create_word');
+// Route::post('/remove_word', 'ChatBotController@remove_word');
+// Route::post('/create_response', 'ChatBotController@create_response');
+// Route::post('/update_response', 'ChatBotController@update_response');
+// Route::post('/remove_response', 'ChatBotController@remove_response');
 
 // EXCEL
 
@@ -127,17 +117,41 @@ Route::get('email_validation/{email}', 'RegisterController@email_validation');
 Route::get('phone_validation/{phone}', 'RegisterController@phone_validation');
 Route::get('/get_application/{id}', 'RegisterController@get_application');
 
-// APPLICANTS CONTROLLER
+// ADMINS->APPLICANT CONTROLLER
 Route::get('selectApplicantsByStatus/{status}', 'AdminController@selectApplicantsByStatus');
 Route::get('/admins/applicants/edit/{id}', 'AdminController@applicants_edit');
-
 Route::get('/admins/applicants', 'AdminController@applicants');
-
-
+Route::get('/applicants/{status}/{id}', 'AdminController@applicants_status');
 
 // SubjectController
 Route::resource('subjects', 'SubjectController');
-Route::put('/subjects/remove/{id}', 'SubjectController@remove_subject');
+Route::get('/subjects/remove/{id}', 'SubjectController@remove');
 
 // ExamController
 Route::resource('exams', 'ExamController');
+
+// ResponseController
+Route::resource('responses', 'ResponseController');
+Route::get('responses/remove/{id}', 'ResponseController@remove');
+Route::post('responses/addWord', 'ResponseController@addWord');
+Route::get('responses/removeWord/{id}', 'ResponseController@removeWord');
+
+// SYSADMIN CONTROLLER
+Route::get('/sysadmins', 'SysAdminController@index');
+Route::post('/sysadmins/register_user', 'SysAdminController@register_user');
+Route::get('/sysadmins/edit/{id}', 'SysAdminController@edit');
+Route::post('/sysadmins/update', 'SysAdminController@update');
+Route::post('/sysadmins/delete', 'SysAdminController@delete');
+
+Route::get('/sysadmins/trails', 'SysAdminController@trails');
+Route::get('/sysadmins/database', 'SysAdminController@database');
+
+// APPLICANT->EXAM CONTROLLER
+Route::post('/applicants/select_date', 'ApplicantController@select_date');
+
+// Route::get('/view_users', 'SysAdminController@view_users');
+// Route::get('/view_database', 'SysAdminController@view_database');
+// Route::get('/view_trails', 'SysAdminController@view_trails');
+// Route::post('/registerUser', 'SysAdminController@registerUser');
+// Route::post('/update_user', 'SysAdminController@update_user');
+// Route::get('/remove_user/{id}', 'SysAdminController@remove_user');

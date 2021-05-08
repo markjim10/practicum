@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@extends('sidebars.sidebar')
+@extends('layouts.sidebar')
 @section('admin')
 
 <link href="{{ asset('css/subjects.css') }}" rel="stylesheet" type="text/css" >

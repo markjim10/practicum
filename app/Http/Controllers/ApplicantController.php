@@ -7,49 +7,55 @@ use App\ExamDate;
 use App\Feedback;
 use App\Question;
 use App\Applicant;
-use App\AppResult;
+use App\ApplicantExam;
 use Carbon\Carbon;
 use App\TempAnswer;
 use App\Exam_Subject;
 use App\AppExamResult;
+use App\ExamSubject;
+use App\Services\ExaminationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ApplicantController extends Controller
 {
-    public function __construct()
+    protected $examinationService;
+
+    public function __construct(ExaminationService $examinationService)
     {
         $this->middleware('applicant');
+        $this->examinationService = $examinationService;
     }
 
     public function index()
     {
-        $app = Applicant::where('user_id', Auth::user()->id)->first();
-        $examdates = ExamDate::getApplicationDates($app->application);
+        $id = Auth::user()->id;
+        $app = Applicant::where('user_id', $id)->first();
+        $exams = $this->examinationService->getAvailableExams($app->application);
+        $yourExam = $this->examinationService->yourExam($app->id);
 
         $isDatePassed = "";
         $isExamLive = "";
 
-
-        $yourExam = ExamDate::where('id', $app->appResult->exam_date)->first();
         if ($yourExam != null) {
-            $start = $yourExam->exam_start;
-            $start = Carbon::parse($start);
-            $end = $yourExam->exam_end;
-            $end = Carbon::parse($end);
+            $start = Carbon::parse($yourExam->exam_start);
+            $end = Carbon::parse($yourExam->exam_end);
             $now = Carbon::now();
-            $isDatePassed = json_encode($now->greaterThan($end));
-            $isExamLive = json_encode(Carbon::now()->between($start, $end));
+
+            $isDatePassed = $now->greaterThan($end);
+            $isExamLive = $now->between($start, $end);
         }
+
+        // dd($app->applicantExam->exam_id . " " . $id);
 
 
         return view('applicants.index', compact(
             'app',
-            'examdates',
+            'exams',
             'yourExam',
-            'isExamLive',
-            'isDatePassed'
+            'isDatePassed',
+            'isExamLive'
         ));
     }
 
@@ -62,23 +68,24 @@ class ApplicantController extends Controller
     public function select_date(Request $request)
     {
         $app = Applicant::where('user_id', Auth::user()->id)->first();
-        $appResult = AppResult::where('applicant_id', $app->id)->first();
-        $appResult->exam_date = $request->date_id;
-        $appResult->save();
-        return redirect()->action('ApplicantController@index');
+        $applicantExam = ApplicantExam::where('applicant_id', $app->id)->first();
+        $applicantExam->exam_id = $request->exam_id;
+        $applicantExam->save();
+
+        return redirect()->back();
     }
 
     public function exam_live()
     {
         $app = Applicant::where('user_id', Auth::user()->id)->first();
-        $appResult = AppResult::where('applicant_id', $app->id)->first();
+        $applicantExam = ApplicantExam::where('applicant_id', $app->id)->first();
 
-        if ($appResult->time_start == "pending") {
-            $appResult->time_start = Carbon::now();
-            $appResult->save();
+        if ($applicantExam->time_start == "pending") {
+            $applicantExam->time_start = Carbon::now();
+            $applicantExam->save();
         }
 
-        $yourExam = ExamDate::where('id', $app->appResult->exam_date)->first();
+        $yourExam = ExamDate::where('id', $app->applicantExam->exam_date)->first();
         $start = Carbon::parse($yourExam->exam_start);
         $end = Carbon::parse($yourExam->exam_end);
         $now = Carbon::now();
@@ -145,9 +152,9 @@ class ApplicantController extends Controller
 
         $applicant = Applicant::where('user_id', Auth::user()->id)->first();
 
-        $appResult = AppResult::where('applicant_id', $applicant->id)->first();
-        $yourExam = ExamDate::where('id', $appResult->exam_date)->first();
-        $subjects = Exam_Subject::where('exam_id', $yourExam->exam_id)->get();
+        $applicantExam = applicantExam::where('applicant_id', $applicant->id)->first();
+        $yourExam = ExamDate::where('id', $applicantExam->exam_date)->first();
+        $subjects = ExamSubject::where('exam_id', $yourExam->exam_id)->get();
 
         $subjects =  DB::table('exam__subjects')
             ->leftjoin('subjects', 'exam__subjects.subject_id', '=', 'subjects.id')
@@ -195,7 +202,7 @@ class ApplicantController extends Controller
 
         $score = $correct / $total;
 
-        $app = AppResult::where('applicant_id', $applicant->id)->first();
+        $app = applicantExam::where('applicant_id', $applicant->id)->first();
         $app->exam_score = $score;
         $app->exam_result = $result;
         $app->time_end = Carbon::now();
@@ -207,10 +214,10 @@ class ApplicantController extends Controller
     public function exam_results()
     {
         $app = Applicant::where('user_id', Auth::user()->id)->first();
-        $appResult = AppResult::where('applicant_id', $app->id)->first();
+        $applicantExam = applicantExam::where('applicant_id', $app->id)->first();
 
-        if ($appResult->exam_result == "pending") {
-            return view('applicants.exam_results', compact('app', 'appResult'));
+        if ($applicantExam->exam_result == "pending") {
+            return view('applicants.exam_results', compact('app', 'applicantExam'));
         }
 
         $appExamResult = AppExamResult::where('applicant_id', $app->id)->get();
@@ -222,12 +229,12 @@ class ApplicantController extends Controller
             ->where('applicants.id', '=', $app->id)
             ->get();
 
-        $end = new Carbon($appResult->time_end);
-        $start = new Carbon($appResult->time_start);
+        $end = new Carbon($applicantExam->time_end);
+        $start = new Carbon($applicantExam->time_start);
 
         $totalDuration = $end->diffInSeconds($start);
 
-        $dateExam = ExamDate::where('id', $appResult->exam_date)->first();
+        $dateExam = ExamDate::where('id', $applicantExam->exam_date)->first();
         $dateExam = $dateExam->exam_date;
 
         $end = Carbon::parse($end)->format('g:i:s a');
@@ -238,7 +245,7 @@ class ApplicantController extends Controller
         return view('applicants.exam_results', compact(
             'app',
             'results',
-            'appResult',
+            'applicantExam',
             'totalDuration',
             'end',
             'start',

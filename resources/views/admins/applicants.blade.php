@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@extends('sidebars.sidebar')
+@extends('layouts.sidebar')
 @section('admin')
 
 {{-- <script src="{{ secure_asset('js/admins/applicants_home.js') }}" defer></script> --}}
@@ -30,7 +30,7 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="applicantsBody">
+                <tbody id="applicantsBody" style="text-transform:capitalize;">
                     @foreach($applicants as $app)
                     <tr>
                         <td>{{$app->id}}</td>

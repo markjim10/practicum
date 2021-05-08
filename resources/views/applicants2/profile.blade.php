@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@extends('sidebars.sidebar')
+@extends('layouts.sidebar')
 @section('admin')
 <div class="container-fluid mt-5">
     <div class="card" style="">
@@ -28,8 +28,8 @@
                     <b> School Last Attendend:</b> {{$app->school_last_attended}}
                     <br>
                     <hr>
-                    <img class="" src="data:image;base64,{{$app->card_photo}}" width="100%" height="auto;"/>
-
+                    <img class="" src="data:image;base64,{{$app->card_photo}}"
+                    width="100%" height="auto;"/>
                     <br><br>
 
                 </div>
