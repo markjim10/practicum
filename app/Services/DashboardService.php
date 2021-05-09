@@ -18,49 +18,60 @@ class DashboardService
 
     public function getApplicantsPassingRate()
     {
-        return DB::table('app_exam_results')
-            ->select('result', DB::raw('count(*) as count'))
-            ->groupBy('result')
+        return DB::table('applicant_exams')
+            ->select('exam_result', DB::raw('count(*) as count'))
+            ->groupBy('exam_result')
             ->get();
     }
 
     public function getExamDates()
     {
-        return DB::table('exam_dates')
+        return DB::table('exams')
+            ->select('exam_date', 'total_examinees')
+            ->groupBy('exam_date')
             ->get();
     }
 
     public function schoolPassingRate()
     {
         return DB::table('applicants')
-            ->join('app_exam_results', 'applicants.id', '=', 'app_exam_results.applicant_id')
+            ->join('applicant_exams', 'applicants.id', '=', 'applicant_exams.applicant_id')
             ->select(
                 'applicants.school_last_attended as school',
-                DB::raw('count(case when app_exam_results.result = \'passed\' then 1 else null end) as passed'),
-                DB::raw('count(case when app_exam_results.result = \'failed\' then 1 else null end) as failed'),
-                DB::raw('count(app_exam_results.result) as total'),
-                DB::raw('ROUND((count(case when app_exam_results.result = \'passed\' then 1 else null end)/count(app_exam_results.result))*100,0) as average')
+                DB::raw('count(case when applicant_exams.exam_result = \'passed\' then 1 else null end) as passed'),
+                DB::raw('count(case when applicant_exams.exam_result = \'failed\' then 1 else null end) as failed'),
+                DB::raw('count(applicant_exams.exam_result) as total'),
+                DB::raw('ROUND((count(case when applicant_exams.exam_result = \'passed\' then 1 else null end)/count(applicant_exams.exam_result))*100,0) as average')
             )
+            ->where('applicant_exams.exam_result', '!=', 'pending')
             ->groupBy('applicants.school_last_attended')
-            ->orderByDesc('total')
             ->get();
     }
 
     public function passers()
     {
-        return DB::table('app_exam_results')
-            ->join('applicants', 'app_exam_results.applicant_id', '=', 'applicants.id')
+        return DB::table('applicant_exams')
+            ->join('applicants', 'applicant_exams.applicant_id', '=', 'applicants.id')
             ->get();
+
+        $checkIfEmpty = DB::table('applicant_exams')->get();
+        if ($checkIfEmpty->isEmpty()) {
+            return null;
+        } else {
+            return DB::table('applicants_exam')
+                ->join('applicants', 'applicants_exam.applicant_id', '=', 'applicants.id')
+                ->get();
+        }
     }
 
     public function selectApplicantsByStatus($status)
     {
         if ($status == 'total') {
             return DB::table('applicants')->get();
-        } else {
-            return DB::table('applicants')
-                ->where('status', $status)
-                ->get();
         }
+        return DB::table('applicants')
+            ->where('status', $status)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 }

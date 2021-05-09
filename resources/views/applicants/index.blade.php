@@ -7,26 +7,12 @@
     <h3>Hello, {{$app->first_name}} {{$app->last_name}}</h3>
     <hr>
 
-    @if($app->status == "denied")
-        Your application has been denied
+    @if (Session::has('message'))
+        <div class="alert alert-success">{{ Session::get('message') }}</div>
     @endif
 
-    @if($isDatePassed==true)
-        @if($app->applicantExam->exam_result=="passed")
-            You passed the entrance exam
-        @elseif($app->applicantExam->exam_result=="failed")
-            You failed the entrance exam
-        @else
-            You did not take the entrance exam
-        @endif
-    @else
-        @if($app->applicantExam->exam_result != "pending")
-            @if($app->appResult->exam_result == "passed")
-                You passed the entrance exam
-            @else
-                You failed the entrance exam
-            @endif
-        @endif
+    @if($app->status == "denied")
+        Your application has been denied
     @endif
 
     @if($app->status == "pending")
@@ -43,6 +29,24 @@
 
             @if($isExamLive==true && $app->applicantExam->exam_result=="pending")
                 @include('applicants.components.take_exam')
+            @endif
+        @endif
+
+        @if($isDatePassed==true)
+            @if($app->applicantExam->exam_result=="passed")
+              <p class="lead">You passed the entrance exam</p>
+            @elseif($app->applicantExam->exam_result=="failed")
+               <p class="lead">You failed the entrance exam</p>
+            @else
+               <p class="lead">You did not take the entrance exam</p>
+            @endif
+        @else
+            @if($app->applicantExam->exam_result != "pending")
+                @if($app->applicantExam->exam_result == "passed")
+                   <p class="lead">You passed the entrance exam</p>
+                @else
+                <p class="lead">You failed the entrance exam</p>
+                @endif
             @endif
         @endif
     @endif

@@ -4,11 +4,10 @@
 <div class="container-fluid mt-5">
     <div class="card" style="">
         <div class="card-body">
-            <h3>Hello, {{$app->first_name}} {{$app->last_name}}</h3>
+            <h3>{{$app->first_name}} {{$app->last_name}}</h3>
             <hr>
             <div class="row">
                 <div class="first col-md-9">
-                    <h4>Applicant Profile</h4>
                     <b> Full Name: </b>{{$app->first_name}} {{$app->middle_name}} {{$app->last_name}}
                     <br>
                     <b> Email: </b>{{$app->user->email}}
@@ -16,8 +15,6 @@
                     <b> Province:</b> {{$app->province}}
                     <br>
                     <b> City:</b> {{$app->city}}
-                    <br>
-                    <b> Barangay:</b> {{$app->brgy}}
                     <br>
                     <b> Phone:</b> {{$app->phone}}
                     <br>
@@ -40,7 +37,7 @@
             </div>
             <div class="row">
                 <div class=" col-md-12">
-                    <p style="color:red;">If you encounter any problems send us a message</p>
+                    <p style="color:red;">If you encounter any problems send us an email</p>
                 </div>
             </div>
 
@@ -48,24 +45,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(window).resize(function() {
-    if ($(window).width() < 600) {
-        $(".second").addClass("order-first");
-        $(".photo").css({'width' : '100%'});
-    } else {
-        $(".second").removeClass("order-first");
-    }
-});
-</script>
-
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
 
 
 

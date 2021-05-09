@@ -104,8 +104,7 @@ class Exam extends Model
         foreach ($questions as $question) {
             array_push($question_id, $question->id);
         }
-
-        return Choice::whereIn('question_id', $question_id)->orderBy('id', 'ASC')->get();
+        return Choice::whereIn('question_id', $question_id)->inRandomOrder()->get();
 
         // $arrChoices = [];
         // foreach ($subjects as $subject) {

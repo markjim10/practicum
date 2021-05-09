@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Helper;
 use App\Trails;
 use App\UserAdmin;
 use Illuminate\Http\Request;

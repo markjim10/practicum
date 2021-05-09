@@ -1,8 +1,9 @@
 var dataTable = $('.applicants').DataTable({
     columnDefs: [
       {
-          targets: -1,
-          className: 'dt-body-right'
+        //   targets: -1,
+        //   className: 'dt-body-right',
+          "order": [[ 1, "desc" ]]
       },
     ]
 });
@@ -13,9 +14,11 @@ function selectedStatus() {
         dataType: 'JSON',
         url: "http://127.0.0.1:8000/selectApplicantsByStatus/"+status,
         success: function(response) {
+            console.log(response);
             dataTable.clear();
             $("#applicantsBody").empty();
             for (i = 0; i < response.length; i++) {
+                console.log(response[i]);
               dataTable.row.add([
                   response[i].id,
                   `<a href="/admins/applicants/edit/${response[i].id}">

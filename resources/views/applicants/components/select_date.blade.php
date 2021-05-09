@@ -1,12 +1,11 @@
 <p>Your request is approved, please select a date for your entrance exam.</p>
-<form action="/select_date" method="post">
+<form action="/applicants/select_date" method="post">
     @csrf
     <div class="row">
-
     <div class="col-6">
         @csrf
         <div class="form-group">
-        <select name="date_id" required
+        <select name="exam_id" required
         class='form-control form-control-sm'>
             <option value="" selected disabled>Select Date</option>
             @foreach ($exams as $exam)
@@ -24,6 +23,5 @@
             </button>
         </div>
     </div>
-</div>
-
+    </div>
 </form>

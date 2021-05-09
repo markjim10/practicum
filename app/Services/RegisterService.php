@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\User;
 use App\Applicant;
-use App\AppResult;
 use Coreproc\MsisdnPh\Msisdn;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterService
 {
@@ -84,9 +84,24 @@ class RegisterService
         }
 
         $applicant->save();
+    }
 
-        $appResult = new AppResult();
-        $appResult->applicant_id = $applicant->id;
-        $appResult->save();
+    public function sendMail($status)
+    {
+        // if ($status == "approved") {
+        //     Mail::raw([], function ($message) use ($user) {
+        //         $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
+        //         $message->to($user->email);
+        //         $message->subject('Your application in the OJT 2 Project entrance exam has been approved');
+        //         $message->setBody('<h2>You have been approved and can now log in your account by using your email address, and "changeme" for your password.</h2>', 'text/html');
+        //     });
+        // } else {
+        //     Mail::raw([], function ($message) use ($user) {
+        //         $message->from('mjimdomondon@gmail.com', 'Practicum 2 Project');
+        //         $message->to($user->email);
+        //         $message->subject('Your application in the OJT 2 Project entrance exam has been denied');
+        //         $message->setBody('<h2>Sorry you have been denied.</h2>', 'text/html');
+        //     });
+        // }
     }
 }

@@ -90,6 +90,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if($schoolPassingRate!=null)
                             @foreach($schoolPassingRate as $item)
                             <tr>
                                 <td>{{$item->school}}</td>
@@ -98,6 +99,7 @@
                                 <td>{{$item->average}}%</td>
                             </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -122,13 +124,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach($passers as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->average}} %</td>
-                                <td>{{$item->dateExam}}</td>
-                            </tr>
-                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
@@ -143,62 +138,6 @@
     </div>
     </div>
 </div>
-
-{{-- @php $i=0 @endphp
-@foreach ($arrPrograms as $item)
-    <input class="programs" type="hidden" value="{{$item}}">
-@endforeach
-@foreach ($arrProgramsCount as $item)
-    <input class="programscount" type="hidden" value="{{$item}}">
-@endforeach
-
-@php $i=0 @endphp
-@foreach ($arrDates as $item)
-    <input class="dates" type="hidden" value="{{$item}}">
-@endforeach
-@foreach ($arrCounts as $item)
-    <input class="counts" type="hidden" value="{{$item}}">
-@endforeach --}}
-{{--
-<input id="passed" type="hidden" value="{{$passed}}">
-<input id="failed" type="hidden" value="{{$failed}}"> --}}
-
-{{-- <script>
-    var p = document.getElementById("passed").value;
-    var f = document.getElementById("failed").value;
-    var ctx = document.getElementById("passing").getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ["Passed","Failed"],
-        datasets: [{
-          backgroundColor: ["rgba(46,204,113,0.5)","rgba(231,76,60,0.5)",],
-          borderColor: ["#2ecc71","#e74c3c",],
-          data: [p, f],
-          borderWidth: 3
-        }]
-      }
-    });
-</script>
-
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.table').DataTable({
-            "aLengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
-            "iDisplayLength": 5,
-            "order": [[1, "desc"]]
-    });
-
-    $('.dataTables_filter input[type="search"]')
-    .css({ 'width': '160px', 'display': 'inline-block' });
-
-});
-</script> --}}
-
-{{-- <script src="{{ secure_asset('js/dashboard/preferredCourses.js') }}" defer></script> --}}
-{{-- <script src="{{ secure_asset('js/clock.js') }}" defer></script> --}}
 
 <script src="{{ asset('js/dashboard/preferredPrograms.js') }}"></script>
 <script src="{{ asset('js/dashboard/applicantsPassing.js') }}"></script>

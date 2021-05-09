@@ -16,7 +16,7 @@ $.ajax({
                 backgroundColor: ["rgba(46,204,113,0.5)","rgba(231,76,60,0.5)",],
                 borderColor: ["#2ecc71","#e74c3c",],
                 data: [pass, fail],
-                borderWidth: 3
+                borderWidth: 1
             }]
             }
         });

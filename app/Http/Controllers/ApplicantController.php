@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Exam;
 use App\ExamDate;
-use App\Feedback;
 use App\Question;
 use App\Applicant;
 use App\ApplicantExam;
 use Carbon\Carbon;
 use App\TempAnswer;
-use App\Exam_Subject;
-use App\AppExamResult;
-use App\ExamSubject;
+use App\ApplicantSubject;
 use App\Services\ExaminationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +18,13 @@ use Illuminate\Support\Facades\Auth;
 class ApplicantController extends Controller
 {
     protected $examinationService;
+    protected $exam;
 
-    public function __construct(ExaminationService $examinationService)
+    public function __construct(ExaminationService $examinationService, Exam $exam)
     {
         $this->middleware('applicant');
         $this->examinationService = $examinationService;
+        $this->exam = $exam;
     }
 
     public function index()
@@ -42,13 +41,9 @@ class ApplicantController extends Controller
             $start = Carbon::parse($yourExam->exam_start);
             $end = Carbon::parse($yourExam->exam_end);
             $now = Carbon::now();
-
             $isDatePassed = $now->greaterThan($end);
             $isExamLive = $now->between($start, $end);
         }
-
-        // dd($app->applicantExam->exam_id . " " . $id);
-
 
         return view('applicants.index', compact(
             'app',
@@ -85,21 +80,27 @@ class ApplicantController extends Controller
             $applicantExam->save();
         }
 
-        $yourExam = ExamDate::where('id', $app->applicantExam->exam_date)->first();
-        $start = Carbon::parse($yourExam->exam_start);
-        $end = Carbon::parse($yourExam->exam_end);
-        $now = Carbon::now();
-        $isDatePassed = json_encode($now->greaterThan($end));
-        $isExamLive = json_encode(Carbon::now()->between($start, $end));
-        $secs = $end->diffInSeconds($now);
+        $yourExam = $this->examinationService->yourExam($app->id);
 
-        if ($isExamLive == "false") {
+        $isDatePassed = "";
+        $isExamLive = "";
+
+        if ($yourExam != null) {
+            $start = Carbon::parse($yourExam->exam_start);
+            $end = Carbon::parse($yourExam->exam_end);
+            $now = Carbon::now();
+            $isDatePassed = $now->greaterThan($end);
+            $isExamLive = $now->between($start, $end);
+            $secs = $end->diffInSeconds($now);
+        }
+
+        if ($isExamLive == false) {
             return redirect()->action('ApplicantController@index');
         }
 
-        $subjects = Exam::getExamSubjects($yourExam->exam_id);
-        $questions = Exam::getExamQuestions($subjects);
-        $choices = Exam::getExamChoices($subjects);
+        $subjects = $this->exam->getExamSubjects($yourExam->id);
+        $questions = $this->exam->getExamQuestions($subjects);
+        $choices = $this->exam->getExamChoices($questions);
 
         $answers = TempAnswer::where('applicant_id', $app->id);
         if ($answers->count() == 0) {
@@ -116,7 +117,6 @@ class ApplicantController extends Controller
             ->leftjoin('temp_answers', 'questions.id', '=', 'temp_answers.question_id')
             ->leftjoin('subjects', 'subjects.id', '=', 'questions.subject_id')
             ->where('temp_answers.applicant_id', '=', $app->id)
-            ->where('subjects.status', '=', 'approved')
             ->inRandomOrder()->get();
 
         return view('applicants.exam_live', compact(
@@ -130,14 +130,15 @@ class ApplicantController extends Controller
         ));
     }
 
-    public function update_temp_answer($data)
+    public function update_temp_answer(Request $request)
     {
-        TempAnswer::update_temp_answer($data);
+        TempAnswer::update_temp_answer($request);
         return 'saved temp answer';
     }
 
     public function isDatePassed()
     {
+        return $this->examinationService->isDatePassed();
         return ExamDate::isDatePassed();
     }
 
@@ -150,22 +151,26 @@ class ApplicantController extends Controller
 
         $subjectFailed = false;
 
-        $applicant = Applicant::where('user_id', Auth::user()->id)->first();
+        $applicant = Applicant::where('id', $request->id)->first();
 
-        $applicantExam = applicantExam::where('applicant_id', $applicant->id)->first();
-        $yourExam = ExamDate::where('id', $applicantExam->exam_date)->first();
-        $subjects = ExamSubject::where('exam_id', $yourExam->exam_id)->get();
+        $applicantExam = ApplicantExam::where('applicant_id', $request->id)->first();
 
-        $subjects =  DB::table('exam__subjects')
-            ->leftjoin('subjects', 'exam__subjects.subject_id', '=', 'subjects.id')
-            ->where('exam__subjects.exam_id', '=', $yourExam->exam_id)
+        $exam = Exam::where('id', $applicantExam->exam_id)->first();
+        $exam->total_examinees = $exam->total_examinees + 1;
+        $exam->save();
+
+        $subjects =  DB::table('exam_subjects')
+            ->join('subjects', 'exam_subjects.subject_id', '=', 'subjects.id')
+            ->where('exam_subjects.exam_id', '=', $exam->id)
             ->get();
 
         $i = 0;
+
         foreach ($subjects as $subj) {
             $questions = Question::where('subject_id', $subj->id)->get();
             $subj_correct = 0;
             $subj_total_questions = count($questions);
+
             foreach ($questions as $question) {
                 $answer = TempAnswer::where('question_id', $question->id)
                     ->where('applicant_id', $applicant->id)
@@ -178,20 +183,21 @@ class ApplicantController extends Controller
                 $i++;
             }
 
-            $appExam = new AppExamResult();
-            $appExam->applicant_id = $applicant->id;
-            $appExam->subject_id = $subj->id;
+            $score = $subj_correct / $subj_total_questions;
 
-            $appExamScore = $subj_correct / $subj_total_questions;
-            $appExam->score = $appExamScore;
+            $appSubj = new ApplicantSubject();
+            $appSubj->applicant_id = $applicant->id;
+            $appSubj->subject_id = $subj->id;
+            $appSubj->score = $score;
 
-            if ($appExamScore >= 0.6) {
-                $appExam->result = "passed";
+            if ($score >= 0.6) {
+                $appSubj->result = "passed";
             } else {
-                $appExam->result = "failed";
+                $appSubj->result = "failed";
                 $subjectFailed = true;
             }
-            $appExam->save();
+
+            $appSubj->save();
         }
 
         if ($subjectFailed) {
@@ -202,7 +208,7 @@ class ApplicantController extends Controller
 
         $score = $correct / $total;
 
-        $app = applicantExam::where('applicant_id', $applicant->id)->first();
+        $app = ApplicantExam::where('applicant_id', $applicant->id)->first();
         $app->exam_score = $score;
         $app->exam_result = $result;
         $app->time_end = Carbon::now();
@@ -214,54 +220,35 @@ class ApplicantController extends Controller
     public function exam_results()
     {
         $app = Applicant::where('user_id', Auth::user()->id)->first();
-        $applicantExam = applicantExam::where('applicant_id', $app->id)->first();
+        $applicantExam = ApplicantExam::where('applicant_id', $app->id)->first();
 
         if ($applicantExam->exam_result == "pending") {
-            return view('applicants.exam_results', compact('app', 'applicantExam'));
+            return redirect()->route('applicants')
+                ->with('message', 'You have not yet taken the exam');
         }
 
-        $appExamResult = AppExamResult::where('applicant_id', $app->id)->get();
-        $results = DB::table('subjects')
-            ->select('subjects.*', 'app_exam_results.score', 'app_exam_results.result')
-            ->leftjoin('app_exam_results', 'subjects.id', '=', 'app_exam_results.subject_id')
-            ->leftjoin('applicants', 'applicants.id', '=', 'app_exam_results.applicant_id')
-            ->where('subjects.status', '!=', 'pending')
+        $appExam = ApplicantExam::where('applicant_id', $app->id)->first();
+
+        $applicant = DB::table('applicants')
+            ->join('applicant_exams', 'applicant_exams.applicant_id', 'applicants.id')
+            ->join('exams', 'exams.id', 'applicant_exams.exam_id')
             ->where('applicants.id', '=', $app->id)
+            ->first();
+
+        $subjects = DB::table('subjects')
+            ->select(
+                'subjects.*',
+                'applicant_subjects.*'
+            )
+            ->join('applicant_subjects', 'applicant_subjects.subject_id', 'subjects.id')
+            ->join('applicants', 'applicants.id', 'applicant_subjects.applicant_id')
+            ->where('applicants.id', $app->id)
             ->get();
 
-        $end = new Carbon($applicantExam->time_end);
-        $start = new Carbon($applicantExam->time_start);
-
-        $totalDuration = $end->diffInSeconds($start);
-
-        $dateExam = ExamDate::where('id', $applicantExam->exam_date)->first();
-        $dateExam = $dateExam->exam_date;
-
-        $end = Carbon::parse($end)->format('g:i:s a');
-        $start = Carbon::parse($start)->format('g:i:s a');
-
-        $totalDuration = gmdate('H:i:s', $totalDuration);
 
         return view('applicants.exam_results', compact(
-            'app',
-            'results',
-            'applicantExam',
-            'totalDuration',
-            'end',
-            'start',
-            'dateExam'
+            'applicant',
+            'subjects'
         ));
-    }
-
-    public function store_feedback(Request $request)
-    {
-        Feedback::store_feedback($request);
-        return redirect()->back()->with('message', 'Feedback has been sent');
-    }
-
-    public function send_feedback()
-    {
-        $app = Applicant::where('user_id', Auth::user()->id)->first();
-        return view('applicants.send_feedback', compact('app'));
     }
 }

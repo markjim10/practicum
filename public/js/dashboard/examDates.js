@@ -15,33 +15,7 @@
 
 // console.log(arrCount);
 
-// var ctx = document.getElementById('datesChart').getContext('2d');
-// var myChart = new Chart(ctx, {
-//     type: 'line',
-//     data: {
-//         labels: arrDate,
-//         datasets: [{
-//             label: '# of Examinees',
-//             data: arrCount,
-//             backgroundColor: [
-//                 'rgba(0,33,78,0.5)'
-//             ],
-//             borderColor: [
-//                 '#00214E'
-//             ],
-//             borderWidth: 1
-//         }]
-//     },
-//     options: {
-//         scales: {
-//             yAxes: [{
-//                 ticks: {
-//                     precision: 0,
-//                 }
-//             }]
-//         }
-//     }
-// });
+
 
 $.ajax({
     type: "GET",
@@ -50,6 +24,47 @@ $.ajax({
     success: function(response) {
 
         console.log(response);
+
+        var dates = response.map(function(dates) {
+            return dates.exam_date;
+        });
+
+        var total = response.map(function(total) {
+            return total.total_examinees;
+        });
+
+        console.log(dates);
+        console.log(total);
+
+        var ctx = document.getElementById('datesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: '# of Examinees',
+                    data: total,
+                    backgroundColor: [
+                        'rgba(0,33,78,0.5)'
+                    ],
+                    borderColor: [
+                        '#00214E'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            precision: 0,
+                        }
+                    }]
+                }
+            }
+        });
+
+
 
     }
 });

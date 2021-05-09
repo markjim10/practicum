@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helper;
 use App\Program;
 use App\ExamDate;
 use Illuminate\Http\Request;

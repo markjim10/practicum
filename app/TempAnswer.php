@@ -9,13 +9,12 @@ class TempAnswer extends Model
 {
     public $timestamps = false;
 
-    public static function update_temp_answer($data)
+    public static function update_temp_answer($request)
     {
         $applicant = Applicant::where('user_id', Auth::user()->id)->first();
-        $data = json_decode($data);
-        $temp = TempAnswer::where('question_id', $data->qID)
+        $temp = TempAnswer::where('question_id', $request->qID)
             ->where('applicant_id', $applicant->id)->first();
-        $temp->temp_answer = $data->temp;
+        $temp->temp_answer = $request->temp;
         $temp->save();
     }
 }

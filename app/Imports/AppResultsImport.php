@@ -2,14 +2,14 @@
 
 namespace App\Imports;
 
-use App\AppResult;
+use App\ApplicantExam;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class AppResultsImport implements ToModel
 {
     public function model(array $row)
     {
-        return new AppResult([
+        return new ApplicantExam([
             'id'     => $row[0],
             'user_id'    => $row[1],
             'status'    => $row[2],

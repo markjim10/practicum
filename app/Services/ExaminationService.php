@@ -8,10 +8,12 @@ use App\Choice;
 use App\Trails;
 use App\Subject;
 use App\Question;
+use App\Applicant;
 use Carbon\Carbon;
 use App\ApplicantExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ExaminationService
 {
@@ -50,18 +52,22 @@ class ExaminationService
         $examStatus->isExamLive = $now->between($start, $end);
 
         return $examStatus;
+    }
 
-        // $isDatePassed = "";
-        // $isExamLive = "";
-        // $yourExam = ExamDate::where('id', $app->appResult->exam_date)->first();
-        // if ($yourExam != null) {
-        //     $start = $yourExam->exam_start;
-        //     $start = Carbon::parse($start);
-        //     $end = $yourExam->exam_end;
-        //     $end = Carbon::parse($end);
-        //     $now = Carbon::now();
-        //     $isDatePassed = json_encode($now->greaterThan($end));
-        //     $isExamLive = json_encode(Carbon::now()->between($start, $end));
-        // }
+    public function isDatePassed()
+    {
+        $applicant = Applicant::where('user_id', Auth::user()->id)->first();
+
+        $app = DB::table('applicants')
+            ->select('applicant_exams.id')
+            ->join('applicant_exams', 'applicant_exams.applicant_id', '=', 'applicants.id')
+            ->where('applicants.id', '=', $applicant->id)
+            ->first();
+
+        $yourExam = Exam::where('id', $app->id)->first();
+        $end = Carbon::parse($yourExam->exam_end);
+        $now = Carbon::now();
+
+        return json_encode($now->greaterThan($end));
     }
 }

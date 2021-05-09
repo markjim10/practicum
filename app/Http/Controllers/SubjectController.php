@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Choice;
 use App\Subject;
 use App\Question;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Services\ExaminationService;
 
 class SubjectController extends Controller
 {

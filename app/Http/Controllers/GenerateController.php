@@ -8,7 +8,6 @@ use App\Subject;
 use App\Question;
 use App\Applicant;
 use App\ApplicantExam;
-use App\AppResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,16 +17,6 @@ class GenerateController extends Controller
     public function index()
     {
         return view('home.generate_app');
-    }
-
-    public function approve()
-    {
-        $app = AppResult::all();
-        foreach ($app as $item) {
-            $item->status = "approved";
-            $item->save();
-        }
-        return 'approved';
     }
 
     public function createSubject()
@@ -187,9 +176,9 @@ class GenerateController extends Controller
 
             $app->save();
 
-            $appResult = new ApplicantExam();
-            $appResult->applicant_id = $app->id;
-            $appResult->save();
+            $applicantsExam = new ApplicantExam();
+            $applicantsExam->applicant_id = $app->id;
+            $applicantsExam->save();
         }
         return redirect()->back()->with('message', 'Applicant generated.');
     }

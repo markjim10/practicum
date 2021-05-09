@@ -6,7 +6,6 @@ use App\Program;
 use App\Subject;
 use App\ExamDate;
 use App\Applicant;
-use App\AppResult;
 use App\AppExamResult;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;

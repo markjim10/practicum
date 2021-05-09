@@ -1,30 +1,27 @@
 @extends('layouts.app')
-@extends('sidebars.sidebar')
+@extends('layouts.sidebar')
 @section('admin')
 
 <input id="secs" type="hidden" value="{{$secs}}">
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-2 mb-2">
 
 <h1>Entrance Examination</h1>
 <hr>
 <div id="time_remaining"></div>
-
 <div class="card">
-    <div class="card-body">
-
+<div class="card-body">
 <div class="container-fluid">
 
-<form id="exam" method="post" action="/exam_submit">
+<form id="exam" method="post" action="/applicants/exam_submit">
 @csrf
+<input type="hidden" name="id" value="{{$app->id}}">
 
 @php $i = 1; $j = 0; @endphp
 @foreach ($subjects as $subject)
 
-    <h1>{{$subject->name}}</h1>
-
+    <h1>{{$subject->subject_name}}</h1>
     @foreach ($questions as $question)
-
         @if($question->subject_id == $subject->id)
             <p><b>{{$i++}}.)</b> {{$question->question}}</p>
                 <div class="col-md-6">
@@ -33,12 +30,12 @@
                         @if($question->temp_answer==$choice->choice)
                             <div class="form-check" data-value="{{$question->id}}">
                             <input type="hidden" name="question_id[{{$j}}]" value={{$question->id}}>
-                            <input type="radio"  class="xyz form-check-input" name="answer[{{$j}}]"  value="{{$choice->choice}}" checked required>{{$choice->choice}}
+                            <input type="radio"  class="answer form-check-input" name="answer[{{$j}}]"  value="{{$choice->choice}}" checked required>{{$choice->choice}}
                             </div>
                         @else
                         <div class="form-check" data-value="{{$question->id}}">
                             <input type="hidden" name="question_id[{{$j}}]" value={{$question->id}}>
-                            <input type="radio" class="xyz form-check-input" name="answer[{{$j}}]"  value="{{$choice->choice}}" required>{{$choice->choice}}
+                            <input type="radio" class="answer form-check-input" name="answer[{{$j}}]"  value="{{$choice->choice}}" required>{{$choice->choice}}
                             </div>
                         @endif
                         <br>
@@ -48,7 +45,7 @@
             </div>
         @endif
     @endforeach
-    <hr style="border: 2px solid #00214E">
+    <hr>
 @endforeach
 
 <button class="btn btn-success btn-lg" type="submit">Submit Exam</button>
@@ -60,28 +57,20 @@
 </div>
 
 <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
-
-<script>
-$(".xyz").change(function() {
-
+$(".answer").change(function() {
     var temp = $(this).val();
-
     var qID = $(this).parent().attr('data-value');
     console.log(qID);
 
     let data = {
+            "_token": "{{ csrf_token() }}",
             "temp" : $(this).val(),
             "qID": $(this).parent().attr('data-value'),
         }
 
     $.ajax({
-            type:'GET',
-            url:'/update_temp_answer/'+JSON.stringify(data)+'',
+            type:'POST',
+            url:'/applicants/update_temp_answer/',
             data: data,
             success:function(response)
             {
@@ -92,8 +81,6 @@ $(".xyz").change(function() {
                 console.log(request.responseText);
             }
         });
-
-
 })
 </script>
 
@@ -104,20 +91,19 @@ $(".xyz").change(function() {
         var minute = Math.floor(secs/60);
         var seconds = secs % 60;
         element.innerHTML = "<h4>Time remaining: <b>"+minute+"</b>m " +seconds+"s</h4>";
-        if(secs < 1){
+        if(secs < 1) {
             clearInterval(timer);
             location.reload()
-
         }
             $.ajax({
             type:'GET',
             url:'/isDatePassed',
             success:function(response)
             {
-                // console.log(response);
-                if(response=="true")
+                console.log(response);
+                if(response==true)
                 {
-
+                    // redirect to home
                 }
             },
             error: function (request, status, error)
@@ -125,7 +111,6 @@ $(".xyz").change(function() {
                 console.log(request.responseText);
             }
         });
-
         secs--;
     }, 1000)
 </script>
