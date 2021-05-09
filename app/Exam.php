@@ -104,20 +104,7 @@ class Exam extends Model
         foreach ($questions as $question) {
             array_push($question_id, $question->id);
         }
-        return Choice::whereIn('question_id', $question_id)->inRandomOrder()->get();
 
-        // $arrChoices = [];
-        // foreach ($subjects as $subject) {
-        //     $choices = Choice::where('subject_id', $subject->id)->inRandomOrder()->get();
-        //     foreach ($choices as $choice) {
-        //         array_push($arrChoices, (object)[
-        //             'id' => $choice->id,
-        //             'subject_id' => $choice->subject_id,
-        //             'question_id' => $choice->question_id,
-        //             'choice' => $choice->choice,
-        //         ]);
-        //     }
-        // }
-        // return $arrChoices;
+        return Choice::whereIn('question_id', $question_id)->inRandomOrder()->get();
     }
 }

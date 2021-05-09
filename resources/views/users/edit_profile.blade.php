@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label><strong>Username*</strong></label>
+                                <label>Username</label>
                             </div>
                             <div class="col-md-8">
                                 <input disabled value="{{$user->username}}" class="form-control" type="text" name="username">
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label><strong>Photo <span>*</span></strong></label>
+                                <label>Photo</label>
                                 <small id="photo_message"></small>
                             </div>
                             <div class="col-md-8">
@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label><strong>Old Password</strong></label>
+                                    <label>Old Password</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input required class="form-control" type="password" name="old_pass">
@@ -81,7 +81,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label><strong>New Password</strong></label>
+                                    <label>New Password</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input required class="form-control" type="password" name="password" minlength="4">
@@ -92,7 +92,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label><strong>Confirm Password</strong></label>
+                                    <label>Confirm Password</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input required class="form-control" type="password" name="confirm_password" minlength="4">

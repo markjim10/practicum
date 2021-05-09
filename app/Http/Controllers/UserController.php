@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function editProfile($id)
     {
+        $auth = Auth::user()->id;
+        if ($id != $auth) {
+            return redirect()->back();
+        }
+
         $user = User::where('id', $id)->first();
-        return view('users/editProfile', compact(
+        return view('users/edit_profile', compact(
             'user'
         ));
     }

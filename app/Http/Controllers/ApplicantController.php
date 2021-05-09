@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exam;
-use App\ExamDate;
 use App\Question;
 use App\Applicant;
 use App\ApplicantExam;
@@ -139,7 +138,6 @@ class ApplicantController extends Controller
     public function isDatePassed()
     {
         return $this->examinationService->isDatePassed();
-        return ExamDate::isDatePassed();
     }
 
     public function exam_submit(Request $request)

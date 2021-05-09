@@ -13,9 +13,6 @@
         width: 100%;
       }
 
-      th {
-        height: 50px;
-      }
     </style>
 </head>
 <body>
@@ -35,8 +32,8 @@
                 <td>
                     {{$item->name}}
                 </td>
-        <td>{{$item->average}}</td>
-        <td>{{$item->dateExam}}</td>
+                <td>{{$item->average}}</td>
+                <td>{{$item->date}}</td>
             </tr>
         </tbody>
     @endforeach

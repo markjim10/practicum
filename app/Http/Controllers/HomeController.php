@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exam;
 use App\Program;
-use App\ExamDate;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -42,8 +40,8 @@ class HomeController extends Controller
 
     public function schedule()
     {
-        $collegeSched = ExamDate::where('exam_type', 'college')->get();
-        $shsSched = ExamDate::where('exam_type', 'shs')->get();
+        $collegeSched = Exam::where('exam_type', 'college')->get();
+        $shsSched = Exam::where('exam_type', 'shs')->get();
 
         return view('home.schedule', compact('collegeSched', 'shsSched'));
     }

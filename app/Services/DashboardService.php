@@ -11,7 +11,11 @@ class DashboardService
     {
         return DB::table('applicants')
             ->join('programs', 'applicants.program_id', '=', 'programs.id')
-            ->select('programs.program_id', DB::raw('count(*) as count'))
+            ->select(
+                'programs.program_id',
+                'programs.program_name',
+                DB::raw('count(*) as count')
+            )
             ->groupBy('programs.program_id')
             ->get();
     }
@@ -51,17 +55,15 @@ class DashboardService
     public function passers()
     {
         return DB::table('applicant_exams')
+            ->select(
+                DB::raw("CONCAT(applicants.first_name, ' ', applicants.last_name) AS name"),
+                DB::raw('applicant_exams.exam_score * 100 as average'),
+                'exams.exam_date as date'
+            )
             ->join('applicants', 'applicant_exams.applicant_id', '=', 'applicants.id')
+            ->join('exams', 'applicant_exams.exam_id', 'exams.id')
+            ->where('applicant_exams.exam_result', 'passed')
             ->get();
-
-        $checkIfEmpty = DB::table('applicant_exams')->get();
-        if ($checkIfEmpty->isEmpty()) {
-            return null;
-        } else {
-            return DB::table('applicants_exam')
-                ->join('applicants', 'applicants_exam.applicant_id', '=', 'applicants.id')
-                ->get();
-        }
     }
 
     public function selectApplicantsByStatus($status)

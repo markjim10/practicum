@@ -24,17 +24,17 @@
     <table>
         <thead>
             <tr>
-            <th>Programs Preferred</th>
-            <th>Count of Applicants</th>
+            <th style="width: 80%">Programs Preferred</th>
+            <th>Total Applicants</th>
             </tr>
         </thead>
         <tbody>
-    @foreach ($programs as $item)
+    @foreach ($programs as $program)
             <tr>
                 <td>
-                    {{$item->program}}
+                    {{$program->program_name}}
                 </td>
-        <td>{{$item->count}}</td>
+        <td>{{$program->count}}</td>
             </tr>
         </tbody>
     @endforeach

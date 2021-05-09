@@ -2,7 +2,6 @@
 @extends('layouts.sidebar')
 @section('admin')
 <div class="container-fluid">
-
     <div class="row mt-3">
         <div class="col">
             <div class="digital-clock">
@@ -28,38 +27,38 @@
 
                 <div class="form-group">
                     <hr>
-                    <a href="/programs_report/"
+                    <a href="/reports_programs/"
                     class="btn btn-success btn-sm">Download Report</a>
                 </div>
             </div>
         </div>
 
         <div class="card mb-5">
-            <div class="card-header">Subjects Statistics</div>
+            <div class="card-header">List of Passers</div>
             <div class="card-body">
                 <div class="">
                     <table class="table table-striped table-bordered table-sm">
                         <thead>
                             <tr>
-                            <th style="width: 50%">Subject</th>
-                            <th style="width: 25%">Average</th>
-                            <th style="width: 25%">Questions</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Average</th>
+                            <th scope="col">Date of Exam</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach($exams_results as $item)
+                            @foreach($passers as $item)
                             <tr>
-                                <td>{{$item->subject}}</td>
+                                <td>{{$item->name}}</td>
                                 <td>{{$item->average}} %</td>
-                                <td>{{$item->num_questions}}</td>
+                                <td>{{$item->date}}</td>
                             </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="form-group">
                     <hr>
-                    <a href="/reports_exams/"
+                    <a href="/reports_passers/"
                     class="btn btn-success btn-sm">Download Report</a>
                 </div>
             </div>
@@ -90,7 +89,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if($schoolPassingRate!=null)
                             @foreach($schoolPassingRate as $item)
                             <tr>
                                 <td>{{$item->school}}</td>
@@ -99,7 +97,6 @@
                                 <td>{{$item->average}}%</td>
                             </tr>
                             @endforeach
-                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -110,31 +107,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="card mb-5">
-            <div class="card-header">List of Passers</div>
-            <div class="card-body">
-                <div class="">
-                    <table class="table table-striped table-bordered table-sm">
-                        <thead>
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Average</th>
-                            <th scope="col">Date of Exam</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="form-group">
-                    <hr>
-                    <a href="/reports_passers/"
-                    class="btn btn-success btn-sm">Download Report</a>
-                </div>
-            </div>
-        </div>
-
     </div>
     </div>
 </div>
@@ -142,6 +114,7 @@
 <script src="{{ asset('js/dashboard/preferredPrograms.js') }}"></script>
 <script src="{{ asset('js/dashboard/applicantsPassing.js') }}"></script>
 <script src="{{ asset('js/dashboard/examDates.js') }}"></script>
+<script src="{{ asset('js/dashboard/passers.js') }}"></script>
 
 <script src="{{ asset('js/clock.js') }}" defer></script>
 @endsection

@@ -34,9 +34,9 @@
     @foreach ($schools as $item)
             <tr>
                 <td>{{$item->school}}</td>
+                <td>{{$item->passed}}</td>
                 <td>{{$item->total}}</td>
-                <td>{{$item->pass}}</td>
-                <td>{{$item->passing}}%</td>
+                <td>{{$item->average}}%</td>
             </tr>
         </tbody>
     @endforeach

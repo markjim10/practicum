@@ -26,7 +26,7 @@ Route::get('exportApplicants', 'ExportExcelController@exportApplicants');
 Route::get('exportAppResults', 'ExportExcelController@exportAppResults');
 
 // REPORTS
-Route::get('programs_report', 'ReportsController@programs_report');
+Route::get('reports_programs', 'ReportsController@reports_programs');
 Route::get('reports_exams', 'ReportsController@reports_exams');
 Route::get('reports_passers', 'ReportsController@reports_passers');
 Route::get('reports_school_passing', 'ReportsController@reports_school_passing');
@@ -40,6 +40,7 @@ Route::post('changePassword', 'UserController@changePassword');
 Route::get('getPreferredPrograms', 'DashboardController@getPreferredPrograms');
 Route::get('getApplicantsPassingRate', 'DashboardController@getApplicantsPassingRate');
 Route::get('getExamDates', 'DashboardController@getExamDates');
+Route::get('getListPassers', 'DashboardController@getListPassers');
 
 // HomeController
 Route::get('/', 'HomeController@index');
@@ -49,7 +50,6 @@ Route::get('/contact', 'HomeController@contact');
 Route::get('/programs', 'HomeController@programs');
 Route::get('/schedule', 'HomeController@schedule');
 Route::get('/chatbot/{message}', 'ChatBotController@message');
-
 
 // RegisterController
 Route::get('/register_applicant', 'RegisterController@register');

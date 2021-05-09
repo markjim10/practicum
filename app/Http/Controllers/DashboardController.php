@@ -27,4 +27,9 @@ class DashboardController extends Controller
     {
         return $this->dashboardService->getExamDates();
     }
+
+    public function getListPassers()
+    {
+        return $this->dashboardService->passers();
+    }
 }
