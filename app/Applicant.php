@@ -23,9 +23,4 @@ class Applicant extends Model
     {
         return $this->hasOne(ApplicantExam::class);
     }
-
-    public function feedbacks()
-    {
-        return $this->hasMany(Feedback::class);
-    }
 }
